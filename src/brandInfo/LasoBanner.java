@@ -8,6 +8,8 @@ import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -18,6 +20,16 @@ import baseService.BaseService;
 
 public class LasoBanner extends BaseService {
 	String currentDate = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
+
+	@BeforeClass
+	public static void openBrowerBrandInfo() throws Exception {
+		openBrower("vsp_url");
+	}
+
+	@Before
+	public void setUp() throws InterruptedException {
+		loginVsp("vspuser", "vsppwd", "val");
+	}
 
 	@Test
 	public void lasoBanner() throws InterruptedException {
@@ -76,7 +88,7 @@ public class LasoBanner extends BaseService {
 
 	protected void clickpropt(String iid, String text) throws InterruptedException {
 		rollScreen(iid);
-		
+
 		dr.findElement(By.id(iid)).click();
 		sleep(2000);
 

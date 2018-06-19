@@ -32,8 +32,6 @@ public class PersCustomer extends BaseService {
 	public void individualCus() throws Exception {
 		searchData();// 搜索测试
 		openAndHide();// 展开隐藏搜索区域
-		openAndSet();// 打开积分并设置
-		historySee();// 历史查看
 		resetTest("resetBtn", "searchBtn", "pages");// 重置测试
 		flip();// 翻页
 		delData();// 删除插入的数据
@@ -53,37 +51,6 @@ public class PersCustomer extends BaseService {
 	private void openAndHide() throws InterruptedException {
 		openHide(false);// 隐藏搜索
 		openHide(true);// 展开搜索
-	}
-
-	private void openAndSet() throws InterruptedException {
-		dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[1]/td[11]/a")).click();
-		sleep(2000);// 打开积分设置对话框
-
-		String oldPoints = dr.findElement(By.id("userPoints")).getText();
-		String newPoints = Integer.toString(Integer.parseInt(oldPoints) + 200);
-
-		setPoints("addPoints");// 增加200积分
-		assertEquals(newPoints, dr.findElement(By.id("userPoints")).getText());
-
-		select("changePointsType", "减少");
-		setPoints("reducePoints");// 减少200积分
-		assertEquals(oldPoints, dr.findElement(By.id("userPoints")).getText());
-	}
-
-	private void historySee() throws Exception {
-		dr.findElement(By.linkText("历史记录")).click();
-		sleep(1500);
-
-		assertEquals("减少", dr.findElement(By.xpath("//*[@id='bonusSetHisList']/table/tbody/tr[1]/td[1]")).getText());
-		assertEquals("-200", dr.findElement(By.xpath("//*[@id='bonusSetHisList']/table/tbody/tr[1]/td[2]")).getText());
-		assertEquals("reducePoints",
-				dr.findElement(By.xpath("//*[@id='bonusSetHisList']/table/tbody/tr[1]/td[4]")).getText());
-		assertEquals("增加", dr.findElement(By.xpath("//*[@id='bonusSetHisList']/table/tbody/tr[2]/td[1]")).getText());
-		assertEquals("200", dr.findElement(By.xpath("//*[@id='bonusSetHisList']/table/tbody/tr[2]/td[2]")).getText());
-		assertEquals("addPoints",
-				dr.findElement(By.xpath("//*[@id='bonusSetHisList']/table/tbody/tr[2]/td[4]")).getText());
-
-		closePrompt("bonusSetPanel", 1);
 	}
 
 	private void delData() throws Exception {

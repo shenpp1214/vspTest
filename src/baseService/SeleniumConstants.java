@@ -15,7 +15,7 @@ public class SeleniumConstants {
 	public static final String sql3 = "delete from iov.device where device_id='2017112101';";
 	public static final String sql4 = "delete from iov.device_terminal where device_id='2017112101';";
 	public static final String insertsql = "INSERT INTO iov.sys_user VALUES ('579da69f460340dca8b76ccb207415a5', '1', 'shenpp', 'shenpp', NULL, '2', NULL, '', '2017-11-23 10:53:02', '15951901290', '', '779230186@qq.com', '1', '670b14728ad9902aecba32e22fa4f6bd', '1', '', NULL, NULL, NULL, NULL, NULL, '3', NULL, '0', NULL, NULL, '0', NULL, NULL, '7', '10', '63', 'dinacarrier', 'dinacarrierD001', '0', NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, '0', '1', '0', NULL, NULL, NULL, '0', '0', NULL, '0', '0', NULL, '47280');";
-	public static final String delsql = "DELETE from iov.sys_user where USERNAME='shenpp';";
+	public static final String delsql = "DELETE from iov.sys_user where USERNAME='shenpp' AND subscriberid='579da69f460340dca8b76ccb207415a5';";
 	// 积分统计界面参数
 	public static final String date = "2017-11-26";
 	public static final String user = "嘉兴人保（金币商城）17061517050380793";
