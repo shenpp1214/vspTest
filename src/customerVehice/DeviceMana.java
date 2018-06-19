@@ -13,6 +13,7 @@ import baseService.BaseService;
 import baseService.SeleniumConstants;
 
 public class DeviceMana extends BaseService {
+
 	String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
 
 	private static void prepareData() throws Exception {
@@ -77,7 +78,9 @@ public class DeviceMana extends BaseService {
 		closePrompt("deviceTransBox", 2);// 点取消关闭弹框
 	}
 
-	private void checkNum() {
+	private void checkNum() throws InterruptedException {
+		entryPage("客户车辆", "设备管理");// 进入设备管理页面
+		
 		String text1 = dr.findElement(By.id("sumMessageId")).getText();
 		String text2 = dr.findElement(By.id("pages")).getText();
 		int real1 = Integer.valueOf(text1.split("，")[0].substring(5, text1.split("，")[0].length() - 1));
