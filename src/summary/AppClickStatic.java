@@ -42,6 +42,7 @@ public class AppClickStatic extends BaseService {
 		sleep(2000);
 		dr.findElement(By.id("customSetSubmit")).click();
 		sleep(2000);
+		
 		exportData();// 导出数据
 	}
 
