@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="test" default="runUITests" basedir=".">
+
+	<property name="src" value="./src" />
+	<property name="libs" value="./libs" />
+	<property name="bin" value="./bin" />
+	<property name="result" value="./result" />
+	<!--<property name="temp" value="./temp" />-->
+	<property name="screenshot" value="./screenshot" />
+
+	<path id="test.classpath">
+		<pathelement location="${bin}" />
+		<fileset dir="${libs}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<delete dir="${bin}" />
+		<mkdir dir="${bin}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac source="1.8" srcdir="${src}" fork="true" destdir="${bin}" includeantruntime="false">
+			<compilerarg line="-encoding UTF-8 " />
+			<classpath>
+				<pathelement path="${bin}">
+				</pathelement>
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+
+	<target name="runUITests" depends="compile">
+		<delete dir="${result}" />
+		<mkdir dir="${result}" />
+		<!--	<delete dir="${temp}" />
+		<mkdir dir="${temp}" />-->
+		<mkdir dir="${result}/xml" />
+		<junit printsummary="yes" haltonfailure="no" errorproperty="test.failed" failureproperty="test.failed">
+			<classpath>
+				<pathelement location="${bin}" />
+				<fileset dir="${libs}">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement location="${src}" />
+			</classpath>
+
+			<test name="customerVehice.PersCustomer" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="customerVehice.CorpCustomer" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="customerVehice.VehicleMana" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="customerVehice.DeviceMana" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="customerVehice.FeedbackView" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+
+
+			<test name="brandInfo.BrandInfo" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="brandInfo.LasoBanner" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+
+
+			<test name="summary.VehicleBusinSummary" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.VehicleOnlineBookSummary" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.VehicleTestDriveSummary" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.VehicleAddSummary" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.VehicleDeviceSummary" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.VehicleServicePeriod" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.BonusStatic" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.SalesStatic" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.SalesRankings" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.BalanceMgr" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.SatisfactoryMaintenance" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.RepairSatisfy" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+			<test name="summary.AppClickStatic" haltonfailure="no" todir="${result}/xml">
+				<formatter type="xml" />
+			</test>
+
+		</junit>
+		<junitreport todir="${result}">
+			<fileset dir="${result}/xml">
+				<include name="TEST*.xml" />
+			</fileset>
+			<report format="frames" todir="${result}/html" />
+		</junitreport>
+		<fail message="UI test failed.." if="test.failed" />
+	</target>
+
+</project>

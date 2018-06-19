@@ -1,0 +1,107 @@
+package summary;
+
+import static org.junit.Assert.*;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import baseService.BaseService;
+
+public class VehicleServicePeriod extends BaseService {
+
+	@Test
+	public void vehServicePeriod() throws Exception {
+		entryPage("统计报表", "服务期统计");// 进入页面
+		search();// 搜索测试
+		serviceBalanceMana();// 服务期余额管理
+		exportData();// 导出数据校验
+		openAlertExport();// 打开小弹框并导出检验excel
+	}
+
+	private void search() throws InterruptedException {
+		assertEquals("赠送服务期余额(月)",
+				dr.findElement(By.xpath("//td[@id='serviceBalance_1']/preceding-sibling::th")).getText());
+		assertEquals("续约服务期余额(月)",
+				dr.findElement(By.xpath("//td[@id='serviceBalance_1']/following-sibling::th")).getText());
+		select("periodMode", "按年查询");
+		assertEquals(false, dr.findElement(By.id("searchMonth")).isDisplayed());
+		assertEquals(true, dr.findElement(By.id("searchYear")).isDisplayed());
+
+		dr.findElement(By.id("searchOrgName")).click();
+		dr.findElement(By.xpath("//span[text()='河南锐众汽车有限公司']")).click();
+		sleep(2000);// 选择组织机构
+		dr.findElement(By.id("searchBtn")).click();
+		sleep(3000);// 搜索
+
+		if (!isElementExsit(dr, "//div[@id='home']/table/tbody/tr[2]"))
+			assertEquals("河南锐众汽车有限公司", dr.findElement(By.xpath("//div[@id='home']/table/tbody//td[1]")).getText());
+		else
+			fail();
+	}
+
+	private void serviceBalanceMana() throws InterruptedException {
+		dr.findElement(By.id("serviceBalanceMana")).click();
+		sleep(2000);
+		clickQuery("警告 请选择调入机构");
+
+		dr.findElement(By.id("deptIn")).click();
+		dr.findElement(
+				By.xpath("//div[@id='serviceBalanceManaPanel']/table[2]//tr[1]/td[2]/div//span[text()='河南锐众汽车有限公司']"))
+				.click();
+		sleep(2000);
+		clickQuery("警告 请正确填写调配服务期");
+
+		dr.findElement(By.id("transBalance")).sendKeys("1");
+		clickQuery("警告 服务期余额不支持授权点级");
+		closePrompt("serviceBalanceManaPanel", 2);
+	}
+
+	private void exportData() throws Exception {
+		dr.findElement(By.id("downloadSummary")).click();
+		sleep(3000);
+
+		assertEquals("组织机构", getCellValue1("sheet1", 1, 1));
+		assertEquals("河南锐众汽车有限公司", getCellValue1("sheet1", 2, 1));
+		assertEquals("合同自动到期车辆数(个)", getCellValue1("sheet1", 1, 2));
+		assertEquals("3年期设备（绑定）", getCellValue1("sheet1", 1, 8));
+	}
+
+	private void openAlertExport() throws Exception {
+		List<WebElement> elements = dr.findElements(By.xpath("//div[@id='home']/table/tbody//td"));
+		String[] str = { "", "serviceEndDateVehicleDetail", "newServiceContractDetail", "contractExpireVehicleDetail",
+				"servicePeriodConsumptionDetail", "oneYearBind", "oneYearUnbind", "threeYearBind", "threeYearUnbind",
+				"fiveYearBind", "fiveYearUnbind" };
+		for (int i = 1; i < elements.size() - 6; i = i + 2) {
+			elements.get(i).click();
+			sleep(1000);
+
+			dr.findElement(By.xpath("//div[@id='" + str[i] + "']/ul//button")).click();
+			sleep(3000);
+			assertEquals("用户姓名", getCellValue1("sheet1", 1, 1));
+			assertEquals("手机号码", getCellValue1("sheet1", 1, 2));
+			assertEquals("车牌号码", getCellValue1("sheet1", 1, 3));
+			closePrompt(str[i], 1);
+		}
+
+		for (int i = 5; i < elements.size(); i = i + 2) {
+			elements.get(i).click();
+			sleep(1000);
+
+			dr.findElement(By.xpath("//div[@id='" + str[i] + "']/ul//button")).click();
+			sleep(3000);
+			assertEquals("设备编号", getCellValue1("sheet1", 1, 1));
+			assertEquals("设备服务期年限", getCellValue1("sheet1", 1, 2));
+			assertEquals("绑定状态", getCellValue1("sheet1", 1, 3));
+			closePrompt(str[i], 1);
+		}
+
+	}
+
+	protected void clickQuery(String text) throws InterruptedException {
+		closePrompt("serviceBalanceManaPanel", 1);
+		assertEquals(text, dr.findElement(By.className("noty_text")).getText());
+	}
+}

@@ -1,0 +1,28 @@
+<html xmlns:string="xalan://java.lang.String" xmlns:lxslt="http://xml.apache.org/xslt">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Unit Test Results: All Errors</title>
+<link rel="stylesheet" type="text/css" title="Style" href="stylesheet.css">
+</head>
+<body onload="open('allclasses-frame.html','classListFrame')">
+<h1>Unit Test Results.</h1>
+<table width="100%">
+<tr>
+<td align="left"></td><td align="right">Designed for use with <a href="http://www.junit.org/">JUnit</a> and <a href="http://ant.apache.org/">Ant</a>.</td>
+</tr>
+</table>
+<hr size="1">
+<h2>All Errors</h2>
+<table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+<tr valign="top">
+<th>Class</th><th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
+</tr>
+<tr valign="top" class="Error">
+<td><a href="customerVehice/3_DeviceMana.html">DeviceMana</a></td><td><a name="deviceMana"></a><a href="customerVehice/3_DeviceMana.html#deviceMana">deviceMana</a></td><td>Error</td><td>Duplicate entry '2017112101' for key 'PRIMARY'<br>
+<br>
+<code>com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException: Duplicate entry '2017112101' for key 'PRIMARY'<br>	at java.lang.reflect.CConstructor.newInstance(Unknown Source)<br>	at com.mysql.jdbc.Util.handleNewInstance(Util.java:406)<br>	at com.mysql.jdbc.Util.getInstance(Util.java:381)<br>	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1015)<br>	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:9956)<br>	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3491)<br>	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3423)<br>	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1936)<br>	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2060)<br>	at com.myysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2536)<br>	at com.mysql.jdbc.StatementImpl.executeUpdate(StatementImpl.java:1564)<br>	at com.mysql.jdbc.StatementImpl.executeUpdate(StatementImpl.java:1485)<br>	at baseService.BaseService.mysqlConnect(Unknown SSource)<br>	at customerVehice.DeviceMana.prepareData(Unknown Source)<br>	at customerVehice.DeviceMana.deviceMana(Unknown Source)<br>
+</code></td><td>0.104</td>
+</tr>
+</table>
+</body>
+</html>
