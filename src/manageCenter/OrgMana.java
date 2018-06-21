@@ -2,10 +2,6 @@ package manageCenter;
 
 import static org.junit.Assert.*;
 
-import org.junit.AfterClass;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import baseService.BaseService;
@@ -14,24 +10,15 @@ import baseService.SeleniumConstants;
 public class OrgMana extends BaseService {
 	String sql = "DELETE FROM iov.corp_dept where DEPT_NAME='" + SeleniumConstants.ORANAME + "';";
 
-	@BeforeClass
-	public static void openBrowerOrgMana() throws Exception {
-		openBrower("vsp_url");
-	}
-
-	@Before
-	public void setUp() throws InterruptedException {
-		loginVsp("vspuser", "vsppwd", "val");
-	}
-
 	@Test
-	public void orgMana() throws InterruptedException {
+	public void orgMana() throws Exception {
 		entryPage("管理中心", "组织机构");// 进入页面
 		newOrgMana();// 新增组织机构
 		searchSee();// 搜索并校验数据的正确性
 		modifyOraMana();// 修改新增的组织机构的联系人并校验新值
 		seeDetail();// 查看组织机构详情
 		delOrgMana();// 删除新增的组织机构
+		delData();
 	}
 
 	private void newOrgMana() throws InterruptedException {
@@ -46,9 +33,9 @@ public class OrgMana extends BaseService {
 		dr.findElement(By.id("displayOrderAdd")).sendKeys(SeleniumConstants.sort);// 输入排序
 		sleep(2000);
 		dr.findElement(By.id("corplogo")).sendKeys(getTemplatePath("candy2"));// 上传图标
-		sleep(3000);
+		sleep(4000);
 		dr.findElement(By.id("jcrop_btn")).click();// 裁剪
-		sleep(8000);
+		sleep(9000);
 
 		closePrompt("addDept", 1);// 点击确定新增成功
 		assertAndConfim("添加成功");// 校验成功并确认
@@ -131,16 +118,5 @@ public class OrgMana extends BaseService {
 
 	protected void delData() throws Exception {
 		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", sql);
-	}
-
-	@After
-	public void closeOrgMana() throws Exception {
-		delData();
-		logoutVsp();
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		close();
 	}
 }

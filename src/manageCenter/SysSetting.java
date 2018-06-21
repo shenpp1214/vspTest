@@ -2,8 +2,6 @@ package manageCenter;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -97,7 +95,10 @@ public class SysSetting extends BaseService {
 
 	protected void clickConfirm() throws InterruptedException {
 		dr.findElement(By.id("corpSaveBtn")).click();
-		sleep(5000);
+		sleep(3000);
+
+		dr.findElement(By.id("popup_ok")).click();
+		sleep(2000);
 	}
 
 	protected void sendData(String id, String data) throws InterruptedException {
@@ -108,15 +109,5 @@ public class SysSetting extends BaseService {
 	protected void clearData(String id) throws InterruptedException {
 		dr.findElement(By.id(id)).clear();
 		sleep(1000);
-	}
-
-	@After
-	public void closeSysSetting() throws InterruptedException {
-		logoutVsp();
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		close();
 	}
 }

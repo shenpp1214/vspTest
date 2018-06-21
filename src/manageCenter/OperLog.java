@@ -5,10 +5,6 @@ import java.util.Date;
 import static org.junit.Assert.*;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -19,16 +15,6 @@ public class OperLog extends BaseService {
 	String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
 	String beDate = date + " 00:00:00";
 	String endDate = date + " 23:59:59";
-
-	@BeforeClass
-	public static void openBrowerSysSetting() throws Exception {
-		openBrower("vsp_url");
-	}
-
-	@Before
-	public void setUp() throws InterruptedException {
-		loginVsp("vspuser", "vsppwd", "val");
-	}
 
 	@Test
 	public void sysSetting() throws InterruptedException {
@@ -81,15 +67,5 @@ public class OperLog extends BaseService {
 		sleep(2000);
 
 		assertEquals(false, dr.findElement(By.id("pages")).isDisplayed());
-	}
-
-	@After
-	public void closeSysSetting() throws InterruptedException {
-		logoutVsp();
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		close();
 	}
 }

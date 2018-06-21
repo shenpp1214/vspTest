@@ -1,9 +1,5 @@
 package manageCenter;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -13,15 +9,6 @@ import baseService.BaseService;
 import baseService.SeleniumConstants;
 
 public class UserAccount extends BaseService {
-	@BeforeClass
-	public static void openBrowerUserAccount() throws Exception {
-		openBrower("vsp_url");
-	}
-
-	@Before
-	public void setUp() throws InterruptedException {
-		loginVsp("vspuser", "vsppwd", "val");
-	}
 
 	@Test
 	public void userAccount() throws InterruptedException {
@@ -118,15 +105,5 @@ public class UserAccount extends BaseService {
 
 		dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();
 		sleep(2000);
-	}
-
-	@After
-	public void closeUserAccount() throws InterruptedException {
-		logoutVsp();
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		close();
 	}
 }
