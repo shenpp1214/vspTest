@@ -2,8 +2,6 @@ package manageCenter;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -87,15 +85,5 @@ public class AccountSetting extends BaseService {
 
 		dr.findElement(By.id("popup_ok")).click();
 		sleep(2000);
-	}
-
-	@After
-	public void logoutAccSetting() throws InterruptedException {
-		logoutVsp();
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		close();
 	}
 }
