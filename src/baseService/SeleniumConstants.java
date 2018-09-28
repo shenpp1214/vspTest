@@ -11,7 +11,7 @@ public class SeleniumConstants {
 	public static final String serialNum = "2017123456481001";// 修改原因
 	// sql语句
 	public static final String sql1 = "INSERT INTO iov.device VALUES ('2017112101', NULL, NULL, '1', '2017112101', '2017112101', '', '', '0', '1', '1', NULL, NULL, NULL, NULL, NULL, 'WC', '1', '1', '0', '1', '0', NULL, NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP(), NULL, 'NN00222221N19402', '1', '1', NULL, NULL, NULL, '0', '0', NULL, 'dinacarrier', ' ', NULL, NULL, '0', '0', '0');";
-	public static final String sql2 = "INSERT INTO iov.device_terminal VALUES ('2017112101', 'WC', 'WCBOX', '1', '', '2017112101', NULL, '2017112101', '1', '0', '1', '1', NULL, CURRENT_TIMESTAMP(), '2', 'dina', 'NN00222221N19402', NULL, '0', NULL, NULL, CURRENT_TIMESTAMP(), '0', 'dinacarrier', ' ', '', '', NULL, NULL, '0', '0', '12', CURDATE(), '12', CURDATE(), NULL, NULL, '0', '12', '0', NULL, NULL, '0', '0', '', '');";
+	public static final String sql2 = "INSERT INTO iov.device_terminal VALUES ('2017112101', 'WC', 'WCBOX', '1', '', '2017112101', NULL, '2017112101', '1', '0', '1', '1', NULL, CURRENT_TIMESTAMP(), '2', 'dina', 'NN00222221N19402', NULL, '0', NULL, NULL, CURRENT_TIMESTAMP(), '0', 'dinacarrier', ' ', '', '', NULL, NULL, '0', '0', '12', CURDATE(), '12', CURDATE(), NULL, NULL, '0', '12', '0', NULL, NULL, '0', '0', '', '0', NULL, NULL);";
 	public static final String sql3 = "delete from iov.device where device_id='2017112101';";
 	public static final String sql4 = "delete from iov.device_terminal where device_id='2017112101';";
 	public static final String insertsql = "INSERT INTO iov.sys_user VALUES ('579da69f460340dca8b76ccb207415a5', '1', 'shenpp', 'shenpp', NULL, '2', NULL, '', '2017-11-23 10:53:02', '15951901290', '', '779230186@qq.com', '1', '670b14728ad9902aecba32e22fa4f6bd', '1', '', NULL, NULL, NULL, NULL, NULL, '3', NULL, '0', NULL, NULL, '0', NULL, NULL, '7', '10', '63', 'dinacarrier', 'dinacarrierD001', '0', NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, '0', '1', '0', NULL, NULL, NULL, '0', '0', NULL, '0', '0', NULL, '47280');";
@@ -36,17 +36,11 @@ public class SeleniumConstants {
 	public static final String log_sort2 = "设备管理类型";
 	public static final String log_type2 = "调拨设备";
 	// 管理中心-员工账号
-	public static final String username = "shenpp";
-	public static final String realname = "张先森";
-	public static final String Password = "666666";
-	public static final String Email = "778899212@qq.com";
-	public static final String mobile = "18361221575";
+	public static final String del_user = "DELETE from iov.sys_user where realname='张先森';";
+	public static final String del_sa = "DELETE FROM iov.sa_account WHERE sa_id='03f2c40bdaaa451db972371973f6c750';";
+	public static final String insert_sa = "INSERT INTO iov.sa_account VALUES ('03f2c40bdaaa451db972371973f6c750', 'SA账号11', '18311112222', 'dinacarrierD001', '1', 'dinacarrier', CURRENT_TIMESTAMP());";
 	// 管理中心 - 组织机构
-	public static final String ORANAME = "shenpp专属机构";
-	public static final String ORALINKEDPER = "沈培培";
-	public static final String PERPHONE = "18361221575";
-	public static final String sort = "2";
-	public static final String modper = "申萍萍";
+	public static final String del_dept = "DELETE FROM iov.corp_dept where DEPT_NAME='shenpp专属机构';";
 	// 商户运营-商城订单管理
 	public static final String insert_order = "INSERT INTO poi.t_mall_goods_order VALUES ('59374cadee0c42d993a08dca3c111fef', '54024dc40c574b2799d4f9152e66b808', NULL, 'dinacarrier', '18011014473820691', 'h5', CURRENT_TIMESTAMP(), NULL, '32021801101457138116', '9f6a755724f94272874cb4d91328f60e', '测试Test', 'http://static.cpsdna.com/upload/vmaster/20170802/17080209524220064.JPG', '0.01', '100', '待支付', 'Payment timeout, order cancelled', '', NULL, NULL, '0', CURRENT_TIMESTAMP(), '15371022842', '2018-01-01 00:00:00', '2018-12-31 00:00:00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', '0', NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, NULL);";
 	public static final String update_sql1 = "update poi.t_mall_goods_order set STATUS='101' where id='59374cadee0c42d993a08dca3c111fef';";

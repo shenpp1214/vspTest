@@ -16,21 +16,23 @@ public class DeviceMana extends BaseService {
 
 	String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
 
-	private static void prepareData() throws Exception {
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.sql1);
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.sql2);
+	private static void prepareData(String aaa) throws Exception {
+		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", aaa);
 	}
 
 	@Test
 	public void deviceMana() throws Exception {
-		prepareData();// 准备数据插入
+		prepareData(SeleniumConstants.sql3);// 删除数据
+		prepareData(SeleniumConstants.sql4);// 删除数据
+		prepareData(SeleniumConstants.sql1);// 准备数据插入
+		prepareData(SeleniumConstants.sql2);// 准备数据插入
+
 		entryPage("客户车辆", "设备管理");// 进入设备管理页面
 		searchData();// 搜索新增的数据
 		deviceDetailAndHis();// 查看设备详情+操作历史
 		deviceTrans();// 设备调拨
 		resetTest("resetBtn", "searchBtn", "pages");// 重置测试
 		checkNum();// 校验已绑定+未绑定=所有的数据
-		deleteData();// 删除数据
 	}
 
 	private void searchData() throws InterruptedException {
@@ -80,7 +82,7 @@ public class DeviceMana extends BaseService {
 
 	private void checkNum() throws InterruptedException {
 		entryPage("客户车辆", "设备管理");// 进入设备管理页面
-		
+
 		String text1 = dr.findElement(By.id("sumMessageId")).getText();
 		String text2 = dr.findElement(By.id("pages")).getText();
 		int real1 = Integer.valueOf(text1.split("，")[0].substring(5, text1.split("，")[0].length() - 1));
@@ -89,11 +91,6 @@ public class DeviceMana extends BaseService {
 
 		if ((real3 - real1 - real2) != 0)
 			fail();
-	}
-
-	private static void deleteData() throws Exception {
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.sql3);
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.sql4);
 	}
 
 	protected void removeReadonly(String outid) {

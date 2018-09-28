@@ -42,7 +42,7 @@ public class OperLog extends BaseService {
 		select("log_type", SeleniumConstants.log_type2);// 具体类型
 		clickSearchBtn(SeleniumConstants.log_username, SeleniumConstants.usertype, SeleniumConstants.log_type2, date);// 搜索
 
-		String textbox = dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr/td[5]")).getText();
+		String textbox = dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[5]")).getText();
 
 		if (!textbox.contains("2017112101") || !textbox.contains("调拨"))
 			fail();
@@ -52,12 +52,12 @@ public class OperLog extends BaseService {
 		dr.findElement(By.id("searchBtn")).click();
 		sleep(3000);
 
-		assertEquals(uname, dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[1]/td[1]")).getText());
-		assertEquals(utype, dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[1]/td[2]")).getText());
-		assertEquals(otype, dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[1]/td[3]")).getText()
-				.substring(0, 4));
-		assertEquals(otime, dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[1]/td[4]")).getText()
-				.substring(0, 10));
+		assertEquals(uname, dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[1]")).getText());
+		assertEquals(utype, dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[2]")).getText());
+		assertEquals(otype,
+				dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[3]")).getText().substring(0, 4));
+		assertEquals(otime,
+				dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[4]")).getText().substring(0, 10));
 	}
 
 	protected void clickReset() throws InterruptedException {

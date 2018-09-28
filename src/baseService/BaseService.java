@@ -116,10 +116,9 @@ public class BaseService {
 	public void flip() throws InterruptedException {
 		// 翻页测试
 		dr.findElement(By.xpath("//a[@title='Go to page 3']")).click();
-		sleep(2000);
+		sleep(5000);
 
-		select("pageSelect", "2");
-		assertEquals("2", dr.findElement(By.xpath("//a[@title='Current page is 2']")).getText());
+		assertEquals("3", dr.findElement(By.xpath("//div[@id='page']//li[@class='active']/a")).getText());
 	}
 
 	public void searchTest(String bid, String pid) throws InterruptedException {

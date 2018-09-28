@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 import baseService.BaseService;
 
 public class CorpCustomer extends BaseService {
-	
+
 	@Test
 	public void corpCustomer() throws InterruptedException {
 		entryPage("客户车辆", "企业客户");// 进入企业客户界面

@@ -2,6 +2,8 @@ package manageCenter;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -64,6 +66,8 @@ public class AccountSetting extends BaseService {
 		dr.findElement(By.id("email_m")).clear();
 		dr.findElement(By.id("name_m")).sendKeys(realname);
 		dr.findElement(By.id("email_m")).sendKeys(email);
+		sleep(2000);
+
 		assertPrompt("modInfoBtn", "成功 修改用户信息成功");
 		assertEquals(realname, dr.findElement(By.id("name_m")).getAttribute("value"));
 		assertEquals(email, dr.findElement(By.id("email_m")).getAttribute("value"));
@@ -85,5 +89,15 @@ public class AccountSetting extends BaseService {
 
 		dr.findElement(By.id("popup_ok")).click();
 		sleep(2000);
+	}
+
+	@After
+	public void logoutServiceProvider() throws InterruptedException {
+		logoutVsp();
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		close();
 	}
 }

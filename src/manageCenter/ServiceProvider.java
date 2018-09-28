@@ -4,12 +4,23 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import baseService.BaseService;
 
 public class ServiceProvider extends BaseService {
+	@BeforeClass
+	public static void openBrowerSysSetting() throws Exception {
+		openBrower("vsp_url");
+	}
+
+	@Before
+	public void setUp() throws InterruptedException {
+		loginVsp("vspuser", "vsppwd", "val");
+	}
 
 	@Test
 	public void serviceProvider() throws InterruptedException {
