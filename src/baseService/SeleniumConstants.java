@@ -67,4 +67,23 @@ public class SeleniumConstants {
 	public static final String del_cat = "DELETE FROM poi.t_mall_category_type where NAME='糖果时刻';";
 	public static final String del_gc = "DELETE from poi.t_mall_goods_category WHERE name='糖果铺子';";
 	public static final String del_goods = "DELETE FROM poi.t_mall_goods where NAME='开心糖果';";
+	// 运营中心 - 人保
+	public static final String insert_act = "INSERT INTO iov.t_activity_info VALUES ('jspicc_winbigcrab_201809', '请你吃大闸蟹', CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(), '', NULL, '1', NULL, '0', '0', NULL, '1');";
+	public static final String insert_winrecord = "INSERT INTO iov.t_lottery_record VALUES ('fake2018092510', 'fake2018092510', '199****5961', '', 'jspicc_winbigcrab_201809', '2', '2', NULL, '1',CURRENT_TIMESTAMP(), '0', '0000-00-00 00:00:00', CURRENT_TIMESTAMP(), '1');";
+	public static final String del_act = "DELETE FROM iov.t_activity_info WHERE activity_name='请你吃大闸蟹';";
+	public static final String del_winrecord = "DELETE FROM iov.t_lottery_record WHERE activity_id='jspicc_winbigcrab_201809';";
+	// 运营中心 - 违章订单
+	public static final String insert_vioOrder = "INSERT INTO iov.t_violation_order VALUES ('c86cef2c4148424799181af219a88247', NULL, '17011811315060252', '0', '苏A00088', NULL, 'spp', '18333333333', '100', '32.022858', '118.780060', 'VE9wNkc3Q3JqdWlKSml6Z0dCb29CUnVCLzNFTzZicG9MZWlxV1JTaUtTdz0K', NULL, '待支付', '23.00', '23.00', '20.00', '1', '73.00', '50.00', NULL, CURRENT_TIMESTAMP(), 'xfinder4personal', CURRENT_TIMESTAMP(), NULL, NULL, NULL, NULL, '32451706081047320016', NULL, '123', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());";
+	public static final String del_vioOrder = "DELETE FROM iov.t_violation_order WHERE rec_id='c86cef2c4148424799181af219a88247';";
+	public static final String update_vioOrder101 = "UPDATE iov.t_violation_order set order_status='101' WHERE rec_id='c86cef2c4148424799181af219a88247';";
+	public static final String update_vioOrder102 = "UPDATE iov.t_violation_order set order_status='102' WHERE rec_id='c86cef2c4148424799181af219a88247';";
+	public static final String update_vioOrder200 = "UPDATE iov.t_violation_order set order_status='200' WHERE rec_id='c86cef2c4148424799181af219a88247';";
+	// 运营中心 - 渠道管理
+	public static final String del_channel = "DELETE FROM iov.t_violation_channel WHERE name='新增渠道名称';";
+	// 运营中心-汽车后服务
+	public static final String insert_category = "INSERT INTO iov.app_display_column_category VALUES ('18092711225090641', '百宝箱', '1', 'dinacarrier', '1', '1', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', 'cff0f666404845fa977bccf1b39f0d61', NULL);";
+	public static final String del_category = "DELETE from iov.app_display_column_category WHERE NAME='百宝箱';";
+	public static final String del_column = "DELETE from iov.app_display_column WHERE column_name='测试Test';";
+	// 营销位管理
+	public static final String del_marpos = "DELETE FROM iov.app_market_column WHERE column_name='唤颜面膜oaz';";
 }
