@@ -38,7 +38,7 @@ public class SeleniumConstants {
 	// 管理中心-员工账号
 	public static final String del_user = "DELETE from iov.sys_user where realname='张先森';";
 	public static final String del_sa = "DELETE FROM iov.sa_account WHERE sa_id='03f2c40bdaaa451db972371973f6c750';";
-	public static final String insert_sa = "INSERT INTO iov.sa_account VALUES ('03f2c40bdaaa451db972371973f6c750', 'SA账号11', '18311112222', 'dinacarrierD001', '1', 'dinacarrier', CURRENT_TIMESTAMP());";
+	public static final String insert_sa = "INSERT INTO poi.t_mall_category_type VALUES ('6932ba21177a45458c09da63ad3b2b03', '糖果时刻', '1', '1', CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', 'dinacarrier');";
 	// 管理中心 - 组织机构
 	public static final String del_dept = "DELETE FROM iov.corp_dept where DEPT_NAME='shenpp专属机构';";
 	// 商户运营-商城订单管理
@@ -49,18 +49,19 @@ public class SeleniumConstants {
 	public static final String update_sql4 = "update poi.t_mall_goods_order set STATUS='202' where id='59374cadee0c42d993a08dca3c111fef';";
 	public static final String update_sql5 = "update poi.t_mall_goods_order set STATUS='300' where id='59374cadee0c42d993a08dca3c111fef';";
 	public static final String delete_order = "DELETE from poi.t_mall_goods_order where id='59374cadee0c42d993a08dca3c111fef';";
-	public static final String orderId = "59374cadee0c42d993a08dca3c111fef";
-	public static final String userName = "嘉兴人保（金币商城）17121216501910047";
-	public static final String mobile1 = "15371022842";
-	public static final String goodsName = "测试Test";
-	// 商户运营-商城商品管理
-	public static final String insert_mer = "INSERT INTO poi.t_mall_merchant VALUES ('54036d2a65bc429b93199a0b0c710d28', '46f6b33cd8ea49fb874da554bca0535b', '菇凉de店铺', NULL, NULL, 'dinacarrier', '0.30', '118.792669', '31.971146', '江苏省南京市南京南站', '17811110000', NULL, NULL, 'http://static.cpsdna.com/upload/vmaster/20180130/18013016401040279.JPG', NULL, '10:00', '21:00', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '南京银行', '张宪森', '12345678901111122222', NULL, NULL, NULL, NULL, '2', '1', '2', NULL, NULL, '2018-01-30 16:40:12', 'cff0f666404845fa977bccf1b39f0d61', '2018-01-30 16:41:16', 'cff0f666404845fa977bccf1b39f0d61', NULL, NULL, '0', '0', NULL);";
-	public static final String insert_cat = "INSERT INTO poi.t_mall_category_type VALUES ('6a41aa2a3c084137bd4b4cde9bf8cb43', '糖果时刻', '1', '1',CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', 'dinacarrier');";
-	public static final String insert_gc = "INSERT INTO poi.t_mall_goods_category VALUES ('b28d086873f24f2594fe2d0eb0b2c651', '糖果铺子', 'http://static.cpsdna.com/upload/vmaster/20180211/18021111411310036.JPG', '1', '1', NULL, 'dinacarrier', NULL, '6a41aa2a3c084137bd4b4cde9bf8cb43', 'cff0f666404845fa977bccf1b39f0d61', CURRENT_TIMESTAMP());";
+	// 商户运营-商城商户管理
 	public static final String del_mer = "DELETE from poi.t_mall_merchant WHERE name='菇凉de店铺';";
-	public static final String del_cat = "DELETE FROM poi.t_mall_category_type where NAME='糖果时刻';";
+	public static final String del_u = "DELETE FROM iov.sys_user WHERE username='hans111';";
+	// 商户运营-商城商品管理
+	public static final String insert_mer = "INSERT INTO poi.t_mall_merchant VALUES ('54036d2a65bc429b93199a0b0c710d28', '46f6b33cd8ea49fb874da554bca0535b', '菇凉de店铺', NULL, NULL, 'dinacarrier', '0.30', '118.792669', '31.971146', '江苏省南京市南京南站', '17811110000', NULL, NULL, 'http://static.cpsdna.com/upload/vmaster/20180130/18013016401040279.JPG', NULL, '10:00', '21:00', NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '南京银行', '张宪森', '12345678901111122222', NULL, NULL, NULL, NULL, '2', '1', '2', NULL, NULL, CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', NULL, NULL, '0', '0', NULL);";
+	public static final String insert_gc = "INSERT INTO poi.t_mall_goods_category VALUES ('b28d086873f24f2594fe2d0eb0b2c651', '糖果铺子', 'http://static.cpsdna.com/upload/vmaster/20180211/18021111411310036.JPG', '1', '1', NULL, 'dinacarrier', NULL, '6a41aa2a3c084137bd4b4cde9bf8cb43', 'cff0f666404845fa977bccf1b39f0d61', CURRENT_TIMESTAMP());";
+	public static final String insert_goods = "INSERT INTO poi.t_mall_goods VALUES ('6acc72d49b13469ea3fe10f4d5ce8776', '开心糖果', '', '54036d2a65bc429b93199a0b0c710d28', 'dinacarrier', '13.80', '0', 'b28d086873f24f2594fe2d0eb0b2c651', '1', 'http://static.cpsdna.com/upload/vmaster/20180930/18093009343073211.JPG', 'http://static.cpsdna.com/upload/vmaster/20180930/18093009342673210.JPG', '', '<p>测试测试哦</p>', NULL, NULL, CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', CURRENT_TIMESTAMP(), NULL, '', '0', '1', '0', '0', '0', '0', '0', 'ALL', NULL, '0', '0', NULL, '0.00');";
 	public static final String del_gc = "DELETE from poi.t_mall_goods_category WHERE name='糖果铺子';";
 	public static final String del_goods = "DELETE FROM poi.t_mall_goods where NAME='开心糖果';";
+	// 商户运营 - 栏目管理
+	public static final String del_ca = "DELETE FROM poi.t_mall_category_type where NAME LIKE'糖果时刻%';";
+	public static final String del_goodsca = "DELETE FROM poi.t_mall_goods_category where NAME like'解忧糖%';";
+	public static final String insert_ca = "INSERT INTO poi.t_mall_category_type VALUES ('6932ba21177a45458c09da63ad3b2b03', '糖果时刻', '1', '1', '2018-09-29 17:04:20', 'cff0f666404845fa977bccf1b39f0d61', 'dinacarrier');";
 	// 运营中心 - 人保
 	public static final String insert_act = "INSERT INTO iov.t_activity_info VALUES ('jspicc_winbigcrab_201809', '请你吃大闸蟹', CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(), '', NULL, '1', NULL, '0', '0', NULL, '1');";
 	public static final String insert_winrecord = "INSERT INTO iov.t_lottery_record VALUES ('fake2018092510', 'fake2018092510', '199****5961', '', 'jspicc_winbigcrab_201809', '2', '2', NULL, '1',CURRENT_TIMESTAMP(), '0', '0000-00-00 00:00:00', CURRENT_TIMESTAMP(), '1');";

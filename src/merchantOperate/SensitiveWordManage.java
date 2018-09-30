@@ -2,35 +2,12 @@ package merchantOperate;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import baseService.BaseService;
 
 public class SensitiveWordManage extends BaseService {
-	@BeforeClass
-	public static void openBrowerSenWordMan() throws Exception {
-		openBrower("vsp_url");
-	}
-
-	@AfterClass
-	public static void tearDown() {
-		close();
-	}
-
-	@Before
-	public void setUp() throws InterruptedException {
-		loginVsp("vspuser", "vsppwd", "val");
-	}
-
-	@After
-	public void logoutSenWordMan() throws InterruptedException {
-		logoutVsp();
-	}
 
 	@Test
 	public void sensitiveWordMan() throws InterruptedException {
@@ -42,8 +19,7 @@ public class SensitiveWordManage extends BaseService {
 
 		assertEquals("警告 请输入敏感词", dr.findElement(By.className("noty_text")).getText());
 
-		dr.findElement(By.id("detail")).sendKeys(
-				"1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位1$We位");
+		dr.findElement(By.id("detail")).sendKeys("We位1$We位111$We位1$We位1$We位1$We位1$We位");
 		dr.findElement(By.id("save_btn")).click();
 		sleep(2000);
 
