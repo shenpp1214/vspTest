@@ -38,7 +38,7 @@ public class SeleniumConstants {
 	// 管理中心-员工账号
 	public static final String del_user = "DELETE from iov.sys_user where realname='张先森';";
 	public static final String del_sa = "DELETE FROM iov.sa_account WHERE sa_id='03f2c40bdaaa451db972371973f6c750';";
-	public static final String insert_sa = "INSERT INTO poi.t_mall_category_type VALUES ('6932ba21177a45458c09da63ad3b2b03', '糖果时刻', '1', '1', CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', 'dinacarrier');";
+	public static final String insert_sa = "INSERT INTO iov.sa_account VALUES ('03f2c40bdaaa451db972371973f6c750', 'SA账号11', '18311112222', 'dinacarrierD001', '1', 'dinacarrier', CURRENT_TIMESTAMP());";
 	// 管理中心 - 组织机构
 	public static final String del_dept = "DELETE FROM iov.corp_dept where DEPT_NAME='shenpp专属机构';";
 	// 商户运营-商城订单管理
@@ -61,7 +61,7 @@ public class SeleniumConstants {
 	// 商户运营 - 栏目管理
 	public static final String del_ca = "DELETE FROM poi.t_mall_category_type where NAME LIKE'糖果时刻%';";
 	public static final String del_goodsca = "DELETE FROM poi.t_mall_goods_category where NAME like'解忧糖%';";
-	public static final String insert_ca = "INSERT INTO poi.t_mall_category_type VALUES ('6932ba21177a45458c09da63ad3b2b03', '糖果时刻', '1', '1', '2018-09-29 17:04:20', 'cff0f666404845fa977bccf1b39f0d61', 'dinacarrier');";
+	public static final String insert_ca = "INSERT INTO poi.t_mall_category_type VALUES ('6932ba21177a45458c09da63ad3b2b03', '糖果时刻', '1', '1', CURRENT_TIMESTAMP(), 'cff0f666404845fa977bccf1b39f0d61', 'dinacarrier');";
 	// 运营中心 - 人保
 	public static final String insert_act = "INSERT INTO iov.t_activity_info VALUES ('jspicc_winbigcrab_201809', '请你吃大闸蟹', CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(), '', NULL, '1', NULL, '0', '0', NULL, '1');";
 	public static final String insert_winrecord = "INSERT INTO iov.t_lottery_record VALUES ('fake2018092510', 'fake2018092510', '199****5961', '', 'jspicc_winbigcrab_201809', '2', '2', NULL, '1',CURRENT_TIMESTAMP(), '0', '0000-00-00 00:00:00', CURRENT_TIMESTAMP(), '1');";
