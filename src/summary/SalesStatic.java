@@ -1,7 +1,6 @@
 package summary;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 import baseService.BaseService;
-import baseService.SeleniumConstants;
 
 public class SalesStatic extends BaseService {
 	String date = DateFormatUtils.format(new Date(), "yyyy-MM-dd");
@@ -25,59 +23,56 @@ public class SalesStatic extends BaseService {
 	}
 
 	private void testData() throws InterruptedException {
-		dr.findElement(By.xpath("//button[text()='今天']")).click();
-		sleep(2000);
+		clickEle("//button[text()='今天']", 2000);
 
-		if (!dr.findElement(By.id("totalOrder")).getText().equals("0")) {
-			List<WebElement> elements = dr.findElements(By.xpath("//*[@id='staticList']/table/tbody/tr/td[1]"));
-			assertEquals(1, elements.size());
-
+		List<WebElement> elements = dr.findElements(By.xpath("//*[@id='staticList']//tbody//td[1]"));
+		if (dr.findElement(By.id("totalOrder")).getText().equals("0"))
+			assertEquals("没有查询到数据", elements.get(0).getText());
+		else
 			assertEquals(date, elements.get(0).getText());
-		}
+		assertEquals(1, elements.size());
 	}
 
 	private void customTime() throws Exception {
-		dr.findElement(By.id("customSet")).click();
-
+		clickEle("//*[@id='customSet']", 1500);
 		removeReadonly("searchBeginDate");
 		removeReadonly("searchEndDate");
-		
-		dr.findElement(By.id("searchBeginDate")).clear();
-		dr.findElement(By.id("searchEndDate")).clear();
-		dr.findElement(By.id("searchBeginDate")).sendKeys(SeleniumConstants.date1);
-		dr.findElement(By.id("searchEndDate")).sendKeys(SeleniumConstants.date2);
-		sleep(2000);
-		dr.findElement(By.id("customSetSubmit")).click();
-		sleep(3000);
+		clearInp("searchBeginDate", "2017-10-30");
+		clearInp("searchEndDate", "2017-10-31");
+		clickEle("//*[@id='customSetSubmit']", 3000);
 
 		List<WebElement> elements = dr.findElements(By.xpath("//*[@id='staticList']/table/tbody/tr/td[1]"));
+		List<WebElement> os = dr.findElements(By.xpath("//*[@id='staticList']/table/tbody/tr/td[2]"));
+		List<WebElement> pay = dr.findElements(By.xpath("//*[@id='staticList']/table/tbody/tr/td[3]"));
+
+		int ToOrders = Integer.valueOf(dr.findElement(By.id("totalOrder")).getText());
+		double ToMoney = Double.valueOf(dr.findElement(By.id("totalMoney")).getText());
 		assertEquals(2, elements.size());
-		assertEquals(SeleniumConstants.date3 + "-31", elements.get(0).getText());
-		assertEquals(SeleniumConstants.date3 + "-30", elements.get(1).getText());
+		assertEquals("2017-10-31", elements.get(0).getText());
+		assertEquals("2017-10-30", elements.get(1).getText());
 
-		double order1 = Double
-				.valueOf(dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr[1]/td[2]")).getText());
-		double order2 = Double
-				.valueOf(dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr[2]/td[2]")).getText());
-		double pay1 = Double
-				.valueOf(dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr[1]/td[3]")).getText());
-		double pay2 = Double
-				.valueOf(dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr[2]/td[3]")).getText());
-		double orders = Integer.valueOf(dr.findElement(By.id("totalOrder")).getText());
-		double money = Double.valueOf(dr.findElement(By.id("totalMoney")).getText());
+		int orders = 0;
+		double moneys = 0.0;
+		for (WebElement e : os) {
+			int order = Integer.valueOf(e.getText());
+			orders += order;
+		}
+		for (WebElement e : pay) {
+			double money = Double.valueOf(e.getText());
+			moneys += money;
+		}
+		assertEquals(true, ToOrders == orders);
+		assertEquals(true, ToMoney == moneys);
 
-		if ((order1 + order2) != orders || (pay1 + pay2) != money)
-			fail();
 		exportData();// 导出数据并校验excel数据
-		assertEquals(String.valueOf(order1), getCellValue1("Sheet0", 2, 3));
-		assertEquals(String.valueOf(order2), getCellValue1("Sheet0", 3, 3));
-		assertEquals(String.valueOf(pay1), getCellValue1("Sheet0", 2, 4));
-		assertEquals(String.valueOf(pay2), getCellValue1("Sheet0", 3, 4));
+		assertEquals(os.get(0).getText() + ".0", getCellValue1("Sheet0", 2, 3));
+		assertEquals(os.get(1).getText() + ".0", getCellValue1("Sheet0", 3, 3));
+		assertEquals(pay.get(0).getText() + ".0", getCellValue1("Sheet0", 2, 4));
+		assertEquals(pay.get(1).getText(), getCellValue1("Sheet0", 3, 4));
 	}
 
 	protected void exportData() throws Exception {
-		dr.findElement(By.id("downloadSummary")).click();
-		sleep(3000);
+		clickEle("//*[@id='downloadSummary']", 3000);
 
 		assertEquals("排名", getCellValue1("Sheet0", 1, 1));
 		assertEquals("日期", getCellValue1("Sheet0", 1, 2));
@@ -89,4 +84,16 @@ public class SalesStatic extends BaseService {
 		JavascriptExecutor js = (JavascriptExecutor) dr;
 		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
 	}
+
+	protected void clearInp(String id, String d) throws InterruptedException {
+		dr.findElement(By.id(id)).clear();
+		dr.findElement(By.id(id)).sendKeys(d);
+		sleep(1500);
+	}
+
+	protected void clickEle(String xid, int sec) throws InterruptedException {
+		dr.findElement(By.xpath(xid)).click();
+		sleep(sec);
+	}
+
 }

@@ -44,10 +44,17 @@ public class VehicleBusinSummary extends BaseService {
 			sleep(2000);
 
 			List<WebElement> elements = dr.findElements(By.xpath("//tr[@class='gradeA']/td[1]"));
-			if (s.equals("今天") || s.equals("昨天"))
+			switch (s) {
+			case "今天":
 				assertEquals(1, elements.size());
-			else if (s.equals("最近七天"))
+				break;
+			case "本月":
+				assertEquals(Calendar.getInstance().get(Calendar.DATE), elements.size());
+				break;
+			default:
 				assertEquals(7, elements.size());
+				break;
+			}
 
 			for (int i = 0; i < elements.size(); i++) {
 				Calendar cal = Calendar.getInstance();
@@ -60,22 +67,20 @@ public class VehicleBusinSummary extends BaseService {
 	}
 
 	private void customTime() throws InterruptedException {
-		dr.findElement(By.id("customSet")).click();
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -1);
-		String date1 = DateFormatUtils.format(cal, "yyyy-MM");
-		String date2 = DateFormatUtils.format(new Date(), "yyyy-MM");
+		clickEle("//*[@id='customSet']", 1000);
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.add(Calendar.MONTH, -2);
+		Calendar cal2 = Calendar.getInstance();
+		cal2.add(Calendar.MONTH, -1);
+		String date1 = DateFormatUtils.format(cal1, "yyyy-MM");
+		String date2 = DateFormatUtils.format(cal2, "yyyy-MM");
 
 		removeReadonly("searchBeginDate");
 		removeReadonly("searchEndDate");
-
-		dr.findElement(By.id("searchBeginDate")).clear();
-		dr.findElement(By.id("searchEndDate")).clear();
-		dr.findElement(By.id("searchBeginDate")).sendKeys(date1 + "-15");
-		dr.findElement(By.id("searchEndDate")).sendKeys(date);
-		sleep(2000);
-		dr.findElement(By.id("customSetSubmit")).click();
-		sleep(2000);
+		clearInp("searchBeginDate", date1 + "-15");
+		clearInp("searchEndDate", date2 + "-15");
+		clickEle("//*[@id='customSetSubmit']", 2000);
 
 		List<WebElement> elements = dr.findElements(By.xpath("//tr[@class='gradeA']/td[1]"));
 		assertEquals(2, elements.size());
@@ -84,8 +89,7 @@ public class VehicleBusinSummary extends BaseService {
 	}
 
 	private void exportData() throws Exception {
-		dr.findElement(By.id("downloadSummary")).click();
-		sleep(3000);
+		clickEle("//*[@id='downloadSummary']", 4000);
 
 		assertEquals("日期", getCellValue1("sheet1", 1, 1));
 		assertEquals("故障维修", getCellValue1("sheet1", 1, 2));
@@ -97,7 +101,7 @@ public class VehicleBusinSummary extends BaseService {
 
 	private void foreachClick() throws InterruptedException {
 		List<WebElement> elements = dr.findElements(By.xpath("//tr[1][@class='gradeA']/td"));
-		for (int i = 1; i < elements.size(); i++) {
+		for (int i = 1; i < elements.size(); i = i + 3) {
 			elements.get(i).click();
 			sleep(1000);
 			closePrompt("businDetail", 1);
@@ -107,5 +111,16 @@ public class VehicleBusinSummary extends BaseService {
 	protected void removeReadonly(String outid) {
 		JavascriptExecutor js = (JavascriptExecutor) dr;
 		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
+	}
+
+	protected void clearInp(String id, String d) throws InterruptedException {
+		dr.findElement(By.id(id)).clear();
+		dr.findElement(By.id(id)).sendKeys(d);
+		sleep(1500);
+	}
+
+	protected void clickEle(String xid, int sec) throws InterruptedException {
+		dr.findElement(By.xpath(xid)).click();
+		sleep(sec);
 	}
 }

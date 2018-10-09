@@ -1,14 +1,6 @@
 package baseService;
 
 public class SeleniumConstants {
-	// 结算管理参数
-	public static final String balanceNo = "170930105000530354";// 结算管理 - 结算单号
-	public static final String searchMonth = "2017-08";// 结算管理 - 年月
-	public static final String merchantname = "spp小店铺大开心";// 结算管理(商户结算-商户名称)
-	public static final String balanceNo1 = "170930105000745199";// 商户结算 - 结算单号
-	public static final String fee1 = "6.66";// 修改的金额
-	public static final String reason = "修改金额测试";// 修改原因
-	public static final String serialNum = "2017123456481001";// 修改原因
 	// sql语句
 	public static final String sql1 = "INSERT INTO iov.device VALUES ('2017112101', NULL, NULL, '1', '2017112101', '2017112101', '', '', '0', '1', '1', NULL, NULL, NULL, NULL, NULL, 'WC', '1', '1', '0', '1', '0', NULL, NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP(), NULL, 'NN00222221N19402', '1', '1', NULL, NULL, NULL, '0', '0', NULL, 'dinacarrier', ' ', NULL, NULL, '0', '0', '0');";
 	public static final String sql2 = "INSERT INTO iov.device_terminal VALUES ('2017112101', 'WC', 'WCBOX', '1', '', '2017112101', NULL, '2017112101', '1', '0', '1', '1', NULL, CURRENT_TIMESTAMP(), '2', 'dina', 'NN00222221N19402', NULL, '0', NULL, NULL, CURRENT_TIMESTAMP(), '0', 'dinacarrier', ' ', '', '', NULL, NULL, '0', '0', '12', CURDATE(), '12', CURDATE(), NULL, NULL, '0', '12', '0', NULL, NULL, '0', '0', '', '0', NULL, NULL);";
@@ -16,18 +8,10 @@ public class SeleniumConstants {
 	public static final String sql4 = "delete from iov.device_terminal where device_id='2017112101';";
 	public static final String insertsql = "INSERT INTO iov.sys_user VALUES ('579da69f460340dca8b76ccb207415a5', '1', 'shenpp', 'shenpp', NULL, '2', NULL, '', '2017-11-23 10:53:02', '15951901290', '', '779230186@qq.com', '1', '670b14728ad9902aecba32e22fa4f6bd', '1', '', NULL, NULL, NULL, NULL, NULL, '3', NULL, '0', NULL, NULL, '0', NULL, NULL, '7', '10', '63', 'dinacarrier', 'dinacarrierD001', '0', NULL, '0', NULL, NULL, NULL, NULL, '0', NULL, '0', '1', '0', NULL, NULL, NULL, '0', '0', NULL, '0', '0', NULL, '47280');";
 	public static final String delsql = "DELETE from iov.sys_user where USERNAME='shenpp' AND subscriberid='579da69f460340dca8b76ccb207415a5';";
-	// 积分统计界面参数
-	public static final String date = "2017-11-26";
-	public static final String user = "嘉兴人保（金币商城）17061517050380793";
-	public static final String phone = "15190479709";
-	// 销量排行参数+销量统计
-	public static final String date1 = "2017-10-01";
-	public static final String date2 = "2017-10-31";
-	public static final String date3 = "2017-10";
-	public static double orders = 0.0;
-	public static double moneys = 0.0;
-	// 功能点击统计
-	public static final String beDate = "2017-05-17";
+	// 销量排行+功能点击统计
+	public static int totalOrders = 0;
+	public static double totalPay = 0.0;
+	
 	// 管理中心-操作记录
 	public static final String log_username = "admin@dina";
 	public static final String log_sort1 = "活动管理类型";

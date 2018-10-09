@@ -1,13 +1,16 @@
 package summary;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 
 import baseService.BaseService;
-import baseService.SeleniumConstants;
 
 public class BalanceMgr extends BaseService {
+	public static final String balanceNo = "170930105000530354";// 结算单号
+	public static final String balanceNo1 = "170930105000745199";// 结算单号
+	public static final String merchantname = "spp小店铺大开心";// (商户结算-商户名称)
 
 	@Test
 	public void salesRankings() throws Exception {
@@ -17,118 +20,111 @@ public class BalanceMgr extends BaseService {
 	}
 
 	private void platformSettlement() throws Exception {
-		dr.findElement(By.id("searchMonth")).sendKeys(SeleniumConstants.searchMonth);
-		dr.findElement(By.id("balanceNo")).sendKeys(SeleniumConstants.balanceNo);
-
+		clearInp("searchMonth", "2017-08");
+		clearInp("balanceNo", balanceNo);
 		searchTest("searchBtn", "pages");// 搜索测试
-		exportData("exportBalanceBtn");// 导出平台结算数据校验测试
-		String amountReceivable = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[3]")).getText();// 应收金额
-		String serviceCharge = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[4]")).getText();// 服务费
-		String amountCollected = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[5]")).getText();// 实收金额
-		if ((Double.valueOf(amountCollected) + Double.valueOf(serviceCharge)) != Double.valueOf(amountReceivable))
-			fail();
+		clickEle("//*[@id='exportBalanceBtn']", 3000);// 导出平台结算数据校验测试
 
-		assertEquals(SeleniumConstants.balanceNo, getCellValue1("sheet0", 2, 1));
-		assertEquals(SeleniumConstants.searchMonth, getCellValue1("sheet0", 2, 2));
-		assertEquals(amountReceivable, getCellValue1("sheet0", 2, 3));
-		assertEquals(serviceCharge, getCellValue1("sheet0", 2, 4));
-		assertEquals(amountCollected, getCellValue1("sheet0", 2, 5));
+		String amountReceivable = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[3]")).getText();// 应收金额
+		String serviceCharge = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[4]")).getText();// 服务费
+		String amountCollected = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[5]")).getText();// 实收金额
+
+		assertEquals(true,
+				Double.valueOf(amountReceivable) == Double.valueOf(amountCollected) + Double.valueOf(serviceCharge));
+		assertEquals(balanceNo, getCellValue1("Sheet0", 2, 1));
+		assertEquals("2017-08", getCellValue1("Sheet0", 2, 2));
+		assertEquals(amountReceivable, getCellValue1("Sheet0", 2, 3));
+		assertEquals(serviceCharge, getCellValue1("Sheet0", 2, 4));
+		assertEquals(amountCollected, getCellValue1("Sheet0", 2, 5));
+
 		resetTest("resetBtn", "searchBtn", "pages");// 重置搜索测试
 	}
 
 	private void merchantSettlement() throws Exception {
-		entryLinkPage("商户结算");// 进入商户结算界面
-		dr.findElement(By.id("searchMerName")).sendKeys(SeleniumConstants.merchantname);
-		dr.findElement(By.id("searchMonth")).sendKeys(SeleniumConstants.searchMonth);
-		dr.findElement(By.id("balanceNo")).sendKeys(SeleniumConstants.balanceNo1);
-
+		clickEle("//a[text()='商户结算']", 2000);// 进入商户结算界面
+		clearInp("searchMerName", merchantname);
+		clearInp("searchMonth", "2017-08");
+		clearInp("balanceNo", balanceNo1);
 		searchTest("searchBtn", "pages");
 		operate();// 操作
 		lookOrder();// 查看订单+详情
-		exportData("exportBalanceBtn");// 导出数据
-		String amountReceivable = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[5]")).getText();// 应收金额
-		String serviceCharge = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[6]")).getText();// 服务费
-		String amountCollected = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[7]")).getText();// 实收金额
-		String status = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[8]")).getText();// 状态
-		if ((Double.valueOf(amountCollected) + Double.valueOf(serviceCharge)) != Double.valueOf(amountReceivable))
-			fail();
+		clickEle("//*[@id='exportBalanceBtn']", 3000);// 导出数据
 
-		assertEquals(SeleniumConstants.balanceNo1, getCellValue1("sheet0", 2, 1));
-		assertEquals(SeleniumConstants.searchMonth, getCellValue1("sheet0", 2, 2));
-		assertEquals(SeleniumConstants.merchantname, getCellValue1("sheet0", 2, 3));
-		assertEquals(amountReceivable, getCellValue1("sheet0", 2, 4));
-		assertEquals(serviceCharge, getCellValue1("sheet0", 2, 5));
-		assertEquals(amountCollected, getCellValue1("sheet0", 2, 6));
-		assertEquals(status, getCellValue1("sheet0", 2, 7));
+		String amountReceivable = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[5]")).getText();// 应收金额
+		String serviceCharge = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[6]")).getText();// 服务费
+		String amountCollected = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[7]")).getText();// 实收金额
+		String status = dr.findElement(By.xpath("//*[@id='staticList']//tr/td[8]")).getText();// 状态
+
+		assertEquals(true,
+				Double.valueOf(amountReceivable) == Double.valueOf(amountCollected) + Double.valueOf(serviceCharge));
+		assertEquals(balanceNo1, getCellValue1("Sheet0", 2, 1));
+		assertEquals("2017-08", getCellValue1("Sheet0", 2, 2));
+		assertEquals(merchantname, getCellValue1("Sheet0", 2, 3));
+		assertEquals(amountReceivable, getCellValue1("Sheet0", 2, 4));
+		assertEquals(serviceCharge, getCellValue1("Sheet0", 2, 5));
+		assertEquals(amountCollected, getCellValue1("Sheet0", 2, 6));
+		assertEquals(status, getCellValue1("Sheet0", 2, 7));
+
 		resetTest("resetBtn", "searchBtn", "pages");// 重置搜索测试
 	}
 
 	protected void operate() throws InterruptedException {
-		entryLinkPage("操作");
-		String fee2 = dr.findElement(By.id("balanceTotalPay")).getText();
-		modifyMoney(SeleniumConstants.fee1);// 修改金额
+		clickEle("//*[@id='staticList']//tr[1]//a[1]", 2000);
 
-		dr.findElement(By.id("balanceNo4Handle")).sendKeys(SeleniumConstants.serialNum);
-		dr.findElement(By.id("confirmBtn")).click();
-		sleep(2000);
+		String fee2 = dr.findElement(By.id("balanceTotalPay")).getText();
+
+		modifyMoney("6.66");// 修改金额
+		clearInp("balanceNo4Handle", "2017123456481001");
+		clickEle("//*[@id='confirmBtn']", 2000);
 
 		assertEquals("错误 请先等待商户确认结算单结果", dr.findElement(By.className("noty_text")).getText());
+
 		modifyMoney(fee2);// 修改金额
-		closePage("结算操作");// 关闭操作界面
+		clickEle("//span[text()='结算操作']/following-sibling::button", 2000);// 关闭操作界面
 	}
 
 	protected void modifyMoney(String fee) throws InterruptedException {
-		dr.findElement(By.id("modFeeBtn")).click();// 修改金额
-		sleep(2000);
-
-		dr.findElement(By.id("balanceFee4Mod")).clear();
-		dr.findElement(By.id("balanceFee4Mod")).sendKeys(fee);
-		dr.findElement(By.id("reason4Mod")).clear();
-		dr.findElement(By.id("reason4Mod")).sendKeys(SeleniumConstants.reason);
-
+		clickEle("//*[@id='modFeeBtn']", 2000);// 修改金额
+		clearInp("balanceFee4Mod", fee);
+		clearInp("reason4Mod", "修改金额测试");
 		closePrompt("modFeePanel", 1);
+
 		assertEquals(fee, dr.findElement(By.id("balanceTotalPay")).getText());
 	}
 
 	protected void lookOrder() throws Exception {
-		entryLinkPage("查看订单");
-		String orderNum = dr.findElement(By.xpath("//*[@id='mainContentList1']/table/tbody/tr[1]/td[2]")).getText();
-		String orderName = dr.findElement(By.xpath("//*[@id='mainContentList1']/table/tbody/tr[1]/td[7]")).getText();
-		String orderType = dr.findElement(By.xpath("//*[@id='mainContentList1']/table/tbody/tr[1]/td[9]")).getText();
+		clickEle("//*[@id='staticList']//tr[1]//a[2]", 2000);
+		String orderNum = dr.findElement(By.xpath("//*[@id='mainContentList1']//tr[1]/td[2]")).getText();
+		String orderName = dr.findElement(By.xpath("//*[@id='mainContentList1']//tr[1]/td[7]")).getText();
+		String orderType = dr.findElement(By.xpath("//*[@id='mainContentList1']//tr[1]/td[9]")).getText();
 
-		dr.findElement(By.id("searchSpOrderId")).sendKeys(orderNum);
-		dr.findElement(By.id("searchSpName4Order")).sendKeys(orderName);
-		sleep(2000);
-
+		clearInp("searchSpOrderId", orderNum);
+		clearInp("searchSpName4Order", orderName);
 		select("payType", orderType);
 		searchTest("searchBtn4Order", "pages4Order");// 搜索测试
-		exportData("order_exportBtn");// 导出数据
+		clickEle("//*[@id='order_exportBtn']", 3000);// 导出数据
+
 		assertEquals(orderNum, getCellValue1("Sheet0", 2, 1));
 		assertEquals(orderName, getCellValue1("Sheet0", 2, 6));
 		assertEquals(orderType, getCellValue1("Sheet0", 2, 8));
-		orderDetail(orderNum, orderName, orderType);// 查看订单详情
-		closePage("订单列表");// 关闭订单列表界面
+
+		clickEle("//*[@id='mainContentList1']//tr[1]//a", 2000);// 查看订单详情
+
+		assertEquals(orderNum, dr.findElement(By.id("orderIdInfo")).getAttribute("value"));
+		assertEquals(orderName, dr.findElement(By.id("goodsNameInfo")).getAttribute("value"));
+
+		closePrompt("orderDetailPanel", 1);// 关闭详情页
+		closePrompt("orderListPanel", 1);// 关闭订单列表界面
 	}
 
-	protected void orderDetail(String oNum, String oName, String oType) throws InterruptedException {
-		entryLinkPage("订单详情");
-		assertEquals(oNum, dr.findElement(By.id("orderIdInfo")).getAttribute("value"));
-		assertEquals(oName, dr.findElement(By.id("goodsNameInfo")).getAttribute("value"));
-		closePrompt("orderDetailPanel", 1);
+	protected void clickEle(String xid, int sec) throws InterruptedException {
+		dr.findElement(By.xpath(xid)).click();
+		sleep(sec);
 	}
 
-	protected void exportData(String eid) throws InterruptedException {
-		dr.findElement(By.id(eid)).click();
-		sleep(3000);
-	}
-
-	protected void entryLinkPage(String linkText) throws InterruptedException {
-		dr.findElement(By.linkText(linkText)).click();
-		sleep(2000);
-	}
-
-	protected void closePage(String sText) throws InterruptedException {
-		dr.findElement(By.xpath("//span[text()='" + sText + "']/following-sibling::button")).click();
-		sleep(2000);
+	protected void clearInp(String id, String d) throws InterruptedException {
+		dr.findElement(By.id(id)).clear();
+		dr.findElement(By.id(id)).sendKeys(d);
+		sleep(1000);
 	}
 }

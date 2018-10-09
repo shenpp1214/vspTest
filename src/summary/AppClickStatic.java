@@ -9,77 +9,60 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import baseService.BaseService;
-import baseService.SeleniumConstants;
 
 public class AppClickStatic extends BaseService {
+	public static final String beDate = "2017-05-17";
 
 	@Test
 	public void appClickStatic() throws Exception {
 		entryPage("统计报表", "功能点击统计");
-		checkData();// 校验时间
 		customTime();// 自定义时间+导出数据
 		switchPages();// 切换tab页+导出数据
 	}
 
-	private void checkData() throws InterruptedException {
-		String str[] = { "昨天", "最近七天", "本月" };
-		for (String s : str) {
-			dr.findElement(By.xpath("//button[text()='" + s + "']")).click();
-			sleep(2000);
-		}
-	}
-
 	private void customTime() throws Exception {
-		dr.findElement(By.id("customSet")).click();
-
+		clickEle("//*[@id='customSet']", 1000);
 		removeReadonly("searchBeginDate");
 		removeReadonly("searchEndDate");
-
-		dr.findElement(By.id("searchBeginDate")).clear();
-		dr.findElement(By.id("searchEndDate")).clear();
-		dr.findElement(By.id("searchBeginDate")).sendKeys(SeleniumConstants.beDate);
-		dr.findElement(By.id("searchEndDate")).sendKeys(SeleniumConstants.beDate);
-		sleep(2000);
-		dr.findElement(By.id("customSetSubmit")).click();
-		sleep(2000);
-		
+		clearInp("searchBeginDate", beDate);
+		clearInp("searchEndDate", beDate);
+		clickEle("//*[@id='customSetSubmit']", 2000);
 		exportData();// 导出数据
 	}
 
 	private void switchPages() throws Exception {
-		switchPage("路眼");// 进入路眼界面
+		clickEle("//a[text()='路眼']", 2000);// 进入路眼界面
 		exportData();// 导出数据
-		switchPage("汽车后服务");// 进入汽车后服务
+		clickEle("//a[text()='汽车后服务']", 2000);// 进入汽车后服务
 		exportData();// 导出数据
 	}
 
 	protected void exportData() throws Exception {
-		String fun1 = dr.findElement(By.xpath("//*[@id='maintainList']/table/tbody/tr[1]/td[5]")).getText();
-		String times1 = dr.findElement(By.xpath("//*[@id='maintainList']/table/tbody/tr[1]/td[6]")).getText();
-		String oneUser1 = dr.findElement(By.xpath("//*[@id='maintainList']/table/tbody/tr[1]/td[7]")).getText();
-		String fun2 = dr.findElement(By.xpath("//*[@id='maintainList']/table/tbody/tr[5]/td[5]")).getText();
-		String times2 = dr.findElement(By.xpath("//*[@id='maintainList']/table/tbody/tr[5]/td[6]")).getText();
-		String oneUser2 = dr.findElement(By.xpath("//*[@id='maintainList']/table/tbody/tr[5]/td[7]")).getText();
+		clickEle("//*[@id='downloadSummary']", 3000);
 
-		dr.findElement(By.id("downloadSummary")).click();
-		sleep(3000);
+		String fun = dr.findElement(By.xpath("//*[@id='maintainList']//tr[1]/td[5]")).getText();
+		String times = dr.findElement(By.xpath("//*[@id='maintainList']//tr[1]/td[6]")).getText();
+		String oneUser = dr.findElement(By.xpath("//*[@id='maintainList']//tr[1]/td[7]")).getText();
 
-		assertEquals(fun1, getCellValue1("Sheet0", 2, 2));
-		assertEquals(times1 + ".0", getCellValue1("Sheet0", 2, 3));
-		assertEquals(oneUser1 + ".0", getCellValue1("Sheet0", 2, 4));
-		assertEquals(fun2, getCellValue1("Sheet0", 6, 2));
-		assertEquals(times2 + ".0", getCellValue1("Sheet0", 6, 3));
-		assertEquals(oneUser2 + ".0", getCellValue1("Sheet0", 6, 4));
+		assertEquals(fun, getCellValue1("Sheet0", 2, 2));
+		assertEquals(times + ".0", getCellValue1("Sheet0", 2, 3));
+		assertEquals(oneUser + ".0", getCellValue1("Sheet0", 2, 4));
 	}
 
 	protected void removeReadonly(String outid) {
 		JavascriptExecutor js = (JavascriptExecutor) dr;
-		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
+		js.executeScript("document.getElementById('" + outid + "').removeAttribute('readonly');");
 	}
 
-	protected void switchPage(String text) throws InterruptedException {
-		dr.findElement(By.linkText(text)).click();
-		sleep(2000);
+	protected void clearInp(String id, String d) throws InterruptedException {
+		dr.findElement(By.id(id)).clear();
+		dr.findElement(By.id(id)).sendKeys(d);
+		sleep(1500);
+	}
+
+	protected void clickEle(String xid, int sec) throws InterruptedException {
+		dr.findElement(By.xpath(xid)).click();
+		sleep(sec);
 	}
 
 	@After

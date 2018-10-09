@@ -22,89 +22,70 @@ public class SalesRankings extends BaseService {
 	public void salesRankings() throws Exception {
 		entryPage("统计报表", "销量排行");
 		testData();// 校验按各个时间统计
-		customTime();// 校验跨月自定义时间的统计详情-按月份显示统计
-		entrySalesRank();// 销售额测试
+		customTime();// 校验跨月自定义时间的统计详情-按月份显示统计+销售额测试
 	}
 
 	private void testData() throws InterruptedException {
-		String[] text = { "今天", "昨天", "本月", "最近七天" };
-		for (int i = 0; i < 4; i++) {
-			dr.findElement(By.xpath("//button[text()='" + text[i] + "']")).click();
-			sleep(2000);
+		clickEle("//button[text()='今天']", 2000);
 
-			if (!dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td")).getText().equals("没有查询到数据")) {
-				if (!isElementExsit(dr, "//span[@id='pages']"))
-					fail();
-			}
-		}
+		List<WebElement> elements = dr.findElements(By.xpath("//*[@id='staticList']//tbody//td[1]"));
+		if (!dr.findElement(By.xpath("//*[@id='pages']")).isDisplayed())
+			assertEquals("没有查询到数据", elements.get(0).getText());
 	}
 
 	private void customTime() throws Exception {
-		dr.findElement(By.id("customSet")).click();
-
+		clickEle("//*[@id='customSet']", 1500);
 		removeReadonly("searchBeginDate");
 		removeReadonly("searchEndDate");
+		clearInp("searchBeginDate", "2017-10-01");
+		clearInp("searchEndDate", "2017-10-31");
+		clickEle("//*[@id='customSetSubmit']", 3000);
 
-		dr.findElement(By.id("searchBeginDate")).clear();
-		dr.findElement(By.id("searchEndDate")).clear();
-		dr.findElement(By.id("searchBeginDate")).sendKeys(SeleniumConstants.date1);
-		dr.findElement(By.id("searchEndDate")).sendKeys(SeleniumConstants.date2);
-		sleep(2000);
-		dr.findElement(By.id("customSetSubmit")).click();
-		sleep(3000);
-
-		String allorders = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr[1]/td[3]")).getText();
-		String allmoney = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr[1]/td[4]")).getText();
+		String allorders = dr.findElement(By.xpath("//*[@id='staticList']//tr[1]/td[3]")).getText();
+		String allmoney = dr.findElement(By.xpath("//*[@id='staticList']//tr[1]/td[4]")).getText();
 
 		exportData();// 导出销量排行
 		assertEquals(allorders + ".0", getCellValue1("Sheet0", 2, 3));
 		assertEquals(allmoney, getCellValue1("Sheet0", 2, 4));
-		entryGoodsRank();// 进入商品排行校验数据
-		if (SeleniumConstants.orders != Double.valueOf(allorders)
-				|| SeleniumConstants.moneys != Double.valueOf(allmoney))
-			fail();
-		exportData();// 导出商品排行数据
-		double[] o = { Double.valueOf(getCellValue1("sheet0", 2, 3)), Double.valueOf(getCellValue1("sheet0", 3, 3)),
-				Double.valueOf(getCellValue1("sheet0", 4, 3)), Double.valueOf(getCellValue1("sheet0", 5, 3)),
-				Double.valueOf(getCellValue1("sheet0", 6, 3)), Double.valueOf(getCellValue1("sheet0", 2, 4)),
-				Double.valueOf(getCellValue1("sheet0", 3, 4)), Double.valueOf(getCellValue1("sheet0", 4, 4)),
-				Double.valueOf(getCellValue1("sheet0", 5, 4)), Double.valueOf(getCellValue1("sheet0", 6, 4)) };
-		if ((o[0] + o[1] + o[2] + o[3] + o[4]) != Double.valueOf(allorders)
+		orderErgodic();// 进入商品排行校验数据
+		assertEquals(true, Integer.valueOf(allorders) == SeleniumConstants.totalOrders);
+		assertEquals(true, Double.valueOf(allmoney) == SeleniumConstants.totalPay);
+
+		double[] o = {
+				Integer.valueOf(getCellValue1("sheet0", 2, 3).substring(0, getCellValue1("sheet0", 2, 3).length() - 2)),
+				Integer.valueOf(getCellValue1("sheet0", 3, 3).substring(0, getCellValue1("sheet0", 3, 3).length() - 2)),
+				Integer.valueOf(getCellValue1("sheet0", 4, 3).substring(0, getCellValue1("sheet0", 4, 3).length() - 2)),
+				Integer.valueOf(getCellValue1("sheet0", 5, 3).substring(0, getCellValue1("sheet0", 5, 3).length() - 2)),
+				Integer.valueOf(getCellValue1("sheet0", 6, 3).substring(0, getCellValue1("sheet0", 6, 3).length() - 2)),
+				Double.valueOf(getCellValue1("sheet0", 2, 4)), Double.valueOf(getCellValue1("sheet0", 3, 4)),
+				Double.valueOf(getCellValue1("sheet0", 4, 4)), Double.valueOf(getCellValue1("sheet0", 5, 4)),
+				Double.valueOf(getCellValue1("sheet0", 6, 4)) };
+		if ((o[0] + o[1] + o[2] + o[3] + o[4]) != Integer.valueOf(allorders)
 				|| (o[5] + o[6] + o[7] + o[8] + o[9] != Double.valueOf(allmoney)))
 			fail();
-	}
 
-	private void entrySalesRank() throws Exception {
-		dr.findElement(By.linkText("销售额排行")).click();
-		sleep(1500);
-
-		String saleorder = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[3]")).getText();
-		String salemoney = dr.findElement(By.xpath("//*[@id='staticList']/table/tbody/tr/td[4]")).getText();
-
+		clickEle("//a[text()='销售额排行']", 1500);
 		exportData();
-		assertEquals(saleorder + ".0", getCellValue1("sheet0", 2, 3));
-		assertEquals(salemoney, getCellValue1("sheet0", 2, 4));
+		assertEquals(allorders + ".0", getCellValue1("sheet0", 2, 3));
+		assertEquals(allmoney, getCellValue1("sheet0", 2, 4));
+		assertEquals(allorders, dr.findElement(By.xpath("//*[@id='staticList']//tr[1]/td[3]")).getText());
+		assertEquals(allmoney, dr.findElement(By.xpath("//*[@id='staticList']//tr[1]/td[4]")).getText());
 	}
 
-	protected void entryGoodsRank() throws InterruptedException {
-		dr.findElement(By.linkText("商品排行")).click();
-		sleep(2000);
-		orderErgodic();// 遍历订单和金额取和
-	}
+	protected void orderErgodic() throws Exception {
+		clickEle("//a[text()='商品排行']", 2000);
+		exportData();// 导出商品排行数据
 
-	protected void orderErgodic() throws InterruptedException {
-		String pages = dr.findElement(By.id("pages")).getText();
-		int pagenum = Integer.valueOf(pages.substring(1, pages.length() - 3));
-		List<WebElement> order = dr.findElements(By.xpath("//*[@id='staticList']/table/tbody/tr/td[3]"));
-		List<WebElement> money = dr.findElements(By.xpath("//*[@id='staticList']/table/tbody/tr/td[4]"));
-		for (int i = 0; i < order.size(); i++) {
-			double ord = Double.valueOf(order.get(i).getText());
-			double mon = Double.valueOf(money.get(i).getText());
-			SeleniumConstants.orders += ord;
-			SeleniumConstants.moneys += mon;
+		List<WebElement> order = dr.findElements(By.xpath("//*[@id='staticList']//tr/td[3]"));
+		List<WebElement> money = dr.findElements(By.xpath("//*[@id='staticList']//tr/td[4]"));
+		for (WebElement e : order) {
+			int or = Integer.valueOf(e.getText());
+			SeleniumConstants.totalOrders += or;
 		}
-		if (pagenum != order.size())
-			fail();
+		for (WebElement e : money) {
+			double mon = Double.valueOf(e.getText());
+			SeleniumConstants.totalPay += mon;
+		}
 	}
 
 	protected void exportData() throws Exception {
@@ -119,5 +100,16 @@ public class SalesRankings extends BaseService {
 	protected void removeReadonly(String outid) {
 		JavascriptExecutor js = (JavascriptExecutor) dr;
 		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
+	}
+
+	protected void clearInp(String id, String d) throws InterruptedException {
+		dr.findElement(By.id(id)).clear();
+		dr.findElement(By.id(id)).sendKeys(d);
+		sleep(1500);
+	}
+
+	protected void clickEle(String xid, int sec) throws InterruptedException {
+		dr.findElement(By.xpath(xid)).click();
+		sleep(sec);
 	}
 }

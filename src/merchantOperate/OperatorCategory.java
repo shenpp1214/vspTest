@@ -18,7 +18,7 @@ public class OperatorCategory extends BaseService {
 	public void categoryMgr() throws Exception {
 		prepareData(SeleniumConstants.del_ca);
 		prepareData(SeleniumConstants.del_goodsca);
-		prepareData(SeleniumConstants.insert_sa);
+		prepareData(SeleniumConstants.insert_ca);
 		cateGoryInfo();// 栏目信息
 		cateGoryType();// 栏目类别
 	}
