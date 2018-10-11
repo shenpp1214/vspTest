@@ -34,21 +34,18 @@ public class RecommendGoods4App extends BaseService {
 	}
 
 	private void newRecGoods() throws InterruptedException {
-		dr.findElement(By.id("addCategoryBtn")).click();// 点击新建按钮
-		sleep(1500);
-		dr.findElement(By.id("categoryNameAdd")).sendKeys("每天都要开心");// 输入名称
+		clickEle("//*[@id='addCategoryBtn']", 1000);// 点击新建按钮
+		clearInp("categoryNameAdd", "每天都要开心");// 输入名称
+
 		dr.findElement(By.xpath("//div[@id='uploadGoodsPicDivAdd']//input")).sendKeys(getTemplatePath("candy2"));// 上传图片
 		sleep(3500);
-		dr.findElement(By.id("chooseGoodBtnAdd")).click();// 点击选择商品
-		sleep(1500);
 
-		searchGoods("searchGoodsName", "开心糖果", "searchBtn4Goods", "pages4Good");// 搜索商品
-
-		dr.findElement(By.name("j-choose")).click();// 点击选择按钮
-		sleep(1500);
-
-		select("categoryStatusAdd", "停用");// 选择停用
-		closePrompt("addPanel", 1);// 点击确定按钮
+		clickEle("//*[@id='chooseGoodBtnAdd']", 1000);// 点击选择商品
+		clearInp("searchGoodsName", "开心糖果");
+		searchTest("searchBtn4Goods", "pages4Good");// 搜索商品
+		clickEle("//*[@name='j-choose']", 1000);// 点击选择按钮
+		select("categoryStatusAdd", "停用", 1000);// 选择停用
+		closePrompt("addPanel", 1, 2000);// 点击确定按钮
 
 		assertEquals("成功 创建成功", dr.findElement(By.className("noty_text")).getText());
 	}
@@ -56,30 +53,34 @@ public class RecommendGoods4App extends BaseService {
 	private void operateTest(String n, String t) throws InterruptedException {
 		String page = dr.findElement(By.id("pages")).getText();
 		int p = Integer.valueOf(page.substring(1, page.length() - 3));
+		if (p % 10 == 0)
+			p = p / 10;
+		else
+			p = Integer.valueOf(p / 10) + 1;
 		for (int i = 2; i <= p; i++) {
 			if (!isElementExsit(dr, "//td[text()='每天都要开心']/following-sibling::td"))
-				select("pageSelect", String.valueOf(i));
+				select("pageSelect", String.valueOf(i), 1500);
 			else
 				break;
 		} // 判断新增数据在第几页
 
-		dr.findElement(By.xpath("//td[text()='每天都要开心']/following-sibling::td/a[text()='" + n + "']")).click();// 点击编辑按钮
-		sleep(1500);
-		if (n.equals("编辑")) {
-			closePrompt("editPanel", 1);
-		} else if (n.equals("排序")) {
-			dr.findElement(By.id("categorySort")).clear();
-			dr.findElement(By.id("categorySort")).sendKeys("1");
+		clickEle("//td[text()='每天都要开心']/following-sibling::td/a[text()='" + n + "']", 1500);
 
-			sleep(2000);
-			closePrompt("sortPanel", 1);
+		switch (n) {
+		case "编辑":
+			closePrompt("editPanel", 1, 2000);
+			break;
+		case "排序":
+			clearInp("categorySort", "1");
+			closePrompt("sortPanel", 1, 2000);
 
 			assertEquals("每天都要开心", dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[3]")).getText());
 			assertEquals("开心糖果", dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[4]")).getText());
 			assertEquals("菇凉de店铺", dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[5]")).getText());
-		} else {
-			dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();
-			sleep(2000);
+			break;
+		default:
+			clickEle("//div[@class='noty_buttons']/button[1]", 2000);
+			break;
 		}
 		assertEquals("成功 " + t + "成功", dr.findElement(By.className("noty_text")).getText());
 	}
@@ -87,17 +88,9 @@ public class RecommendGoods4App extends BaseService {
 	private void serRest() throws InterruptedException {
 		String name = dr.findElement(By.xpath("//*[@id='mainContentList']//tr[1]/td[3]")).getText();
 
-		searchGoods("goodsName4Search", name, "searchBtn", "pages");
+		clearInp("goodsName4Search", name);
+		clickEle("//*[@id='searchBtn']", 1500);
 		resetTest("resetBtn", "searchBtn", "pages");
-	}
-
-	private void searchGoods(String id1, String t1, String id2, String id3) throws InterruptedException {
-		dr.findElement(By.id(id1)).sendKeys(t1);
-		sleep(1500);
-		dr.findElement(By.id(id2)).click();
-		sleep(2000);
-
-		assertEquals("共1条数据", dr.findElement(By.id(id3)).getText());
 	}
 
 	@After

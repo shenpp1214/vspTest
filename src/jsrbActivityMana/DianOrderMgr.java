@@ -1,7 +1,6 @@
 package jsrbActivityMana;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
@@ -26,12 +25,14 @@ public class DianOrderMgr extends BaseService {
 	public void dianOrderMgr() throws Exception {
 		modifyData(SeleniumConstants.del_vioOrder);
 		modifyData(SeleniumConstants.insert_vioOrder);
+		entryPage("运营中心", "违章订单管理");
+		clearInp("searchUserName", "spp");
+		clickEle("//*[@id='searchBtn']", 1500);
 
-		searchDatas();
 		String tf = dr.findElement(By.id("totalFine")).getText();
 		String tsf = dr.findElement(By.id("totalServiceFee")).getText();
-		List<WebElement> elements1 = dr.findElements(By.xpath("//*[@id=\"mainContentList\"]/table[1]/tbody/tr/td[6]"));
-		List<WebElement> elements2 = dr.findElements(By.xpath("//*[@id=\"mainContentList\"]/table[1]/tbody/tr/td[7]"));
+		List<WebElement> elements1 = dr.findElements(By.xpath("//*[@id='mainContentList']/table[1]//td[6]"));
+		List<WebElement> elements2 = dr.findElements(By.xpath("//*[@id='mainContentList']/table[1]//td[7]"));
 		int allfine = 0, allserfee = 0;
 		for (WebElement e : elements1) {
 			int f = Integer.valueOf(e.getText());
@@ -41,13 +42,8 @@ public class DianOrderMgr extends BaseService {
 			int sf = Integer.valueOf(e.getText());
 			allserfee += sf;
 		}
-		if (allfine != Integer.valueOf(tf.substring(0, tf.length() - 1))
-				|| allserfee != Integer.valueOf(tsf.substring(0, tsf.length() - 1))) {
-			fail();
-		} else {
-			System.out.println(allfine + "," + Integer.valueOf(tf.substring(0, tf.length() - 1)));
-			System.out.println(allserfee + "," + Integer.valueOf(tsf.substring(0, tsf.length() - 1)));
-		}
+		assertEquals(true, allfine == Integer.valueOf(tf.substring(0, tf.length() - 1)));
+		assertEquals(true, allserfee == Integer.valueOf(tsf.substring(0, tsf.length() - 1)));
 
 		searchOrder("待支付");// 搜索待支付的订单
 		modifyData(SeleniumConstants.update_vioOrder101);// 更改订单状态为处理中
@@ -63,64 +59,46 @@ public class DianOrderMgr extends BaseService {
 		seeDetail("完成");// 查看已完成订单详情
 	}
 
-	private void searchDatas() throws InterruptedException {
-		entryPage("运营中心", "违章订单管理");
-		dr.findElement(By.id("searchUserName")).sendKeys("spp");
-		dr.findElement(By.id("searchBtn")).click();
-		sleep(2000);
-	}
-
 	private void searchOrder(String orderSta) throws Exception {
-		dr.findElement(By.linkText(orderSta)).click();
-		sleep(1000);
+		clickEle("//a[text()='" + orderSta + "']", 1500);
 		if (dr.findElement(By.id("searchOrderNo")).getAttribute("value").equals("")) {
-			dr.findElement(By.id("searchOrderNo")).sendKeys("c86cef2c4148424799181af219a88247");
-			dr.findElement(By.id("searchMobile")).sendKeys("18333333333");
-			sleep(1500);
+			clearInp("searchOrderNo", "c86cef2c4148424799181af219a88247");
+			clearInp("searchMobile", "18333333333");
 			removeReadonly("searchOrderTimeBegin");
 			removeReadonly("searchOrderTimeEnd");
-			dr.findElement(By.id("searchOrderTimeBegin")).sendKeys(date + " 00:00:00");
-			dr.findElement(By.id("searchOrderTimeEnd")).sendKeys(date + " 23:59:59");
-			select("searchChanneSel", "车行者");
-			sleep(1500);
-			dr.findElement(By.id("searchBtn")).click();// 点击搜索按钮
-			sleep(1500);
+			clearInp("searchOrderTimeBegin", date + " 00:00:00");
+			clearInp("searchOrderTimeEnd", date + " 23:59:59");
+			select("searchChanneSel", "车行者", 1000);
+			clickEle("//*[@id='searchBtn']", 1500);
 		}
 
 		assertEquals("共1条数据", dr.findElement(By.id("pages")).getText());
 		assertEquals("50元", dr.findElement(By.id("totalFine")).getText());
 		assertEquals("23元", dr.findElement(By.id("totalServiceFee")).getText());
-		assertEquals("50", dr.findElement(By.xpath("//div[@id='mainContentList']/table[1]/tbody//td[6]")).getText());
-		assertEquals("23", dr.findElement(By.xpath("//div[@id='mainContentList']/table[1]/tbody//td[7]")).getText());
+		assertEquals("50", dr.findElement(By.xpath("//div[@id='mainContentList']/table[1]//td[6]")).getText());
+		assertEquals("23", dr.findElement(By.xpath("//div[@id='mainContentList']/table[1]//td[7]")).getText());
 	}
 
 	private void closeOrder() throws InterruptedException {
-		dr.findElement(By.name("j-accountDetail")).click();
-		sleep(1500);
-		dr.findElement(By.id("remarkInfo")).sendKeys("关闭订单");
-		dr.findElement(By.xpath("//span[text()='关闭订单']")).click();// 点击关闭订单按钮
-		sleep(1500);
-		dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();// 点击确定按钮
-		sleep(2000);
+		clickEle("//*[@name='j-accountDetail']", 1500);
+		clearInp("remarkInfo", "关闭订单");
+		clickEle("//span[text()='关闭订单']", 1500);// 点击关闭订单按钮
+		clickEle("//div[@class='noty_buttons']/button[1]", 2000);// 点击确定按钮
 
 		assertEquals("成功 修改成功", dr.findElement(By.className("noty_text")).getText());
 	}
 
 	private void seeDetail(String staInfo) throws Exception {
-		dr.findElement(By.name("j-accountDetail")).click();
-		sleep(1500);
+		clickEle("//*[@name='j-accountDetail']", 1500);
 
-		if (isElementExsit(dr, "//textarea[@id='remarkInfo']")) {
+		if (isElementExsit(dr, "//textarea[@id='remarkInfo']"))
 			assertEquals("关闭订单", dr.findElement(By.id("remarkInfo")).getAttribute("value"));
-		} else {
+		else
 			assertEquals(staInfo, dr.findElement(By.id("orderStatusInfo")).getAttribute("value"));
-		}
-
 		assertEquals("c86cef2c4148424799181af219a88247", dr.findElement(By.id("orderIdInfo")).getAttribute("value"));
 		assertEquals("车行者", dr.findElement(By.id("channelNameInfo")).getAttribute("value"));
 
-		dr.findElement(By.xpath("//div[@id='deptOrderInfo']/following-sibling::div[9]//button")).click();// 点击取消按钮关闭弹框
-		sleep(2000);
+		clickEle("//div[@id='deptOrderInfo']/following-sibling::div[9]//button", 2000);// 点击取消按钮关闭弹框
 	}
 
 	protected void removeReadonly(String outid) {

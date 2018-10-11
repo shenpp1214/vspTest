@@ -87,7 +87,7 @@ public class BalanceMgr extends BaseService {
 		clickEle("//*[@id='modFeeBtn']", 2000);// 修改金额
 		clearInp("balanceFee4Mod", fee);
 		clearInp("reason4Mod", "修改金额测试");
-		closePrompt("modFeePanel", 1);
+		closePrompt("modFeePanel", 1, 1500);
 
 		assertEquals(fee, dr.findElement(By.id("balanceTotalPay")).getText());
 	}
@@ -100,7 +100,7 @@ public class BalanceMgr extends BaseService {
 
 		clearInp("searchSpOrderId", orderNum);
 		clearInp("searchSpName4Order", orderName);
-		select("payType", orderType);
+		select("payType", orderType, 1000);
 		searchTest("searchBtn4Order", "pages4Order");// 搜索测试
 		clickEle("//*[@id='order_exportBtn']", 3000);// 导出数据
 
@@ -113,18 +113,7 @@ public class BalanceMgr extends BaseService {
 		assertEquals(orderNum, dr.findElement(By.id("orderIdInfo")).getAttribute("value"));
 		assertEquals(orderName, dr.findElement(By.id("goodsNameInfo")).getAttribute("value"));
 
-		closePrompt("orderDetailPanel", 1);// 关闭详情页
-		closePrompt("orderListPanel", 1);// 关闭订单列表界面
-	}
-
-	protected void clickEle(String xid, int sec) throws InterruptedException {
-		dr.findElement(By.xpath(xid)).click();
-		sleep(sec);
-	}
-
-	protected void clearInp(String id, String d) throws InterruptedException {
-		dr.findElement(By.id(id)).clear();
-		dr.findElement(By.id(id)).sendKeys(d);
-		sleep(1000);
+		closePrompt("orderDetailPanel", 1, 1500);// 关闭详情页
+		closePrompt("orderListPanel", 1, 1500);// 关闭订单列表界面
 	}
 }

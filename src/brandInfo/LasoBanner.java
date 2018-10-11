@@ -25,7 +25,6 @@ public class LasoBanner extends BaseService {
 		addLasoBanner();// 新增品牌资讯
 		modifyLasoBanner();// 修改品牌资讯
 		deleteLasoBanner();// 删除新增的品牌资讯
-		resetTest("restBtn", "searchSubmit_active", "pages");// 重置测试
 	}
 
 	private void addLasoBanner() throws InterruptedException {
@@ -33,17 +32,14 @@ public class LasoBanner extends BaseService {
 		cal.add(Calendar.DATE, 1);
 		String date = DateFormatUtils.format(cal.getTime(), "yyyy-MM-dd");
 
-		dr.findElement(By.id("addActiveBtn")).click();// 打开新增弹框
-		sleep(2000);
-
+		clickEle("//*[@id='addActiveBtn']", 2000);
 		clickpropt("addActive", "警告 资讯标题不能为空");
 		rollScreen("infoTitleAdd");
-
-		dr.findElement(By.id("infoTitleAdd")).sendKeys("testAdd品牌资讯");
+		clearInp("infoTitleAdd", "testAdd品牌资讯");
 		removeReadonly("expireTimeAdd");
-		dr.findElement(By.id("expireTimeAdd")).sendKeys(date);
-
+		clearInp("expireTimeAdd", date);
 		uploadPng("上传小图标", "candy2");
+
 		assertEquals("此功能仅开放给金融使用", dr.findElement(By.xpath("//div[@id='main_content']/ol/span")).getText());
 		new WebDriverWait(dr, 3).until(
 				ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//div[@id='edui1_iframeholder']/iframe")));
@@ -54,12 +50,10 @@ public class LasoBanner extends BaseService {
 	}
 
 	private void modifyLasoBanner() throws InterruptedException {
-		dr.findElement(By.xpath("//div[@id='activeList']//tbody/tr[1]//a[@title='修改']")).click();
-		sleep(3000);
+		clickEle("//div[@id='activeList']//tr[1]//a[@title='修改']", 3000);
 		clickpropt("modifyActive", "成功 修改成功");
-
-		dr.findElement(By.id("infoTitle")).sendKeys("testAdd品牌资讯");
-		dr.findElement(By.id("publishTimeBegin")).sendKeys(currentDate);
+		clearInp("infoTitle", "testAdd品牌资讯");
+		clearInp("publishTimeBegin", currentDate);
 		searchTest("searchSubmit_active", "pages");// 搜索新增的数据
 	}
 
@@ -68,20 +62,18 @@ public class LasoBanner extends BaseService {
 		abled("恢复", "成功 恢复成功");// 重新启用
 		abled("停用", "成功 停用成功");
 		abled("移除", "成功 删除成功");
+		resetTest("restBtn", "searchSubmit_active", "pages");// 重置测试
 	}
 
-	protected void abled(String text1, String text2) throws InterruptedException {
-		dr.findElement(By.xpath("//div[@id='activeList']//tbody/tr[1]//a[@title='" + text1 + "']")).click();
-		sleep(2000);
+	protected void abled(String t1, String t2) throws InterruptedException {
+		clickEle("//div[@id='activeList']//tr[1]//a[@title='" + t1 + "']", 2000);
 
-		assertEquals(text2, dr.findElement(By.className("noty_text")).getText());
+		assertEquals(t2, dr.findElement(By.className("noty_text")).getText());
 	}
 
 	protected void clickpropt(String iid, String text) throws InterruptedException {
 		rollScreen(iid);
-
-		dr.findElement(By.id(iid)).click();
-		sleep(3000);
+		clickEle("//*[@id='" + iid + "']", 2000);
 
 		assertEquals(text, dr.findElement(By.className("noty_text")).getText());
 	}

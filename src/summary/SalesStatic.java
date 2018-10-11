@@ -85,15 +85,4 @@ public class SalesStatic extends BaseService {
 		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
 	}
 
-	protected void clearInp(String id, String d) throws InterruptedException {
-		dr.findElement(By.id(id)).clear();
-		dr.findElement(By.id(id)).sendKeys(d);
-		sleep(1500);
-	}
-
-	protected void clickEle(String xid, int sec) throws InterruptedException {
-		dr.findElement(By.xpath(xid)).click();
-		sleep(sec);
-	}
-
 }

@@ -35,79 +35,50 @@ public class SysSetting extends BaseService {
 		assertEquals(false, dr.findElement(By.id("industry")).isEnabled());
 		assertEquals(false, dr.findElement(By.id("subindustry")).isEnabled());
 
-		sendData("contactPerson", "*&12AS是的【】");
-		sendData("phone", "1234567890");
-		sendData("fax", "12345678901");
-		sendData("mail", "798321482@qq.com");
-		sendData("address", "*&12AS是的【】*&12AS是的【】");
-		sendData("corpTitle", "*&12AS是的【】");
-		sendData("note", "*&12AS是的【】");
-		sendData("downloadURL", "http://58.215.50.61:22080/vsp/sysSetting.jsp");
-		sendData("smsSuffix", "*&12AS是的【】");
-		clickConfirm();
-		assertInfo(corpName, provinceId, cityId);
+		clearInp("contactPerson", "#1sS是");
+		clearInp("phone", "1234567890");
+		clearInp("fax", "12345678901");
+		clearInp("mail", "a@w.c");
+		clearInp("address", "#1sS是");
+		clearInp("corpTitle", "#1sS是");
+		clearInp("note", "#1sS是");
+		clearInp("downloadURL", "http://www.baidu.com");
+		clearInp("smsSuffix", "#1sS是");
+		clickEle("//*[@id='corpSaveBtn']", 3000);
+		clickEle("//*[@id='popup_ok']", 3000);
+		assertInfo(corpName, provinceId, cityId, "#1sS是", "1234567890", "12345678901", "a@w.c", "#1sS是", "#1sS是",
+				"#1sS是", "http://www.baidu.com", "#1sS是");
 		resetInfo(corpName, provinceId, cityId);
 	}
 
-	protected void assertInfo(String cn, String pi, String ci) throws InterruptedException {
+	protected void resetInfo(String cn, String pi, String ci) throws InterruptedException {
+		clearInp("contactPerson", "");
+		clearInp("phone", "");
+		clearInp("fax", "");
+		clearInp("mail", "");
+		clearInp("address", "");
+		clearInp("corpTitle", "");
+		clearInp("note", "");
+		clearInp("downloadURL", "");
+		clearInp("smsSuffix", "");
+		clickEle("//*[@id='corpSaveBtn']", 3000);
+		clickEle("//*[@id='popup_ok']", 3000);
+		assertInfo(cn, pi, ci, "", "", "", "", "", "", "", "", "");
+	}
+
+	protected void assertInfo(String cn, String pi, String ci, String a, String b, String c, String d, String e,
+			String f, String g, String h, String i) throws InterruptedException {
 		assertEquals(cn, dr.findElement(By.id("corpName")).getAttribute("value"));
 		assertEquals(pi, dr.findElement(By.id("provinceId")).getAttribute("value"));
 		assertEquals(ci, dr.findElement(By.id("cityId")).getAttribute("value"));
-		assertEquals("*&12AS是的【】", dr.findElement(By.id("contactPerson")).getAttribute("value"));
-		assertEquals("1234567890", dr.findElement(By.id("phone")).getAttribute("value"));
-		assertEquals("12345678901", dr.findElement(By.id("fax")).getAttribute("value"));
-		assertEquals("798321482@qq.com", dr.findElement(By.id("mail")).getAttribute("value"));
-		assertEquals("*&12AS是的【】*&12AS是的【】", dr.findElement(By.id("address")).getAttribute("value"));
-		assertEquals("*&12AS是的【】", dr.findElement(By.id("corpTitle")).getAttribute("value"));
-		assertEquals("*&12AS是的【】", dr.findElement(By.id("note")).getAttribute("value"));
-		assertEquals("http://58.215.50.61:22080/vsp/sysSetting.jsp",
-				dr.findElement(By.id("downloadURL")).getAttribute("value"));
-		assertEquals("*&12AS是的【】", dr.findElement(By.id("smsSuffix")).getAttribute("value"));
-		sleep(2000);
-	}
-
-	protected void resetInfo(String cn, String pi, String ci) throws InterruptedException {
-		clearData("contactPerson");
-		clearData("phone");
-		clearData("fax");
-		clearData("mail");
-		clearData("address");
-		clearData("corpTitle");
-		clearData("note");
-		clearData("downloadURL");
-		clearData("smsSuffix");
-		clickConfirm();
-		assertInfo1(cn, pi, ci);
-	}
-
-	protected void assertInfo1(String cn, String pi, String ci) throws InterruptedException {
-		assertEquals("", dr.findElement(By.id("contactPerson")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("phone")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("fax")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("mail")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("address")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("corpTitle")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("note")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("downloadURL")).getAttribute("value"));
-		assertEquals("", dr.findElement(By.id("smsSuffix")).getAttribute("value"));
-		sleep(2000);
-	}
-
-	protected void clickConfirm() throws InterruptedException {
-		dr.findElement(By.id("corpSaveBtn")).click();
-		sleep(3000);
-
-		dr.findElement(By.id("popup_ok")).click();
-		sleep(2000);
-	}
-
-	protected void sendData(String id, String data) throws InterruptedException {
-		dr.findElement(By.id(id)).sendKeys(data);
-		sleep(1000);
-	}
-
-	protected void clearData(String id) throws InterruptedException {
-		dr.findElement(By.id(id)).clear();
-		sleep(1000);
+		assertEquals(a, dr.findElement(By.id("contactPerson")).getAttribute("value"));
+		assertEquals(b, dr.findElement(By.id("phone")).getAttribute("value"));
+		assertEquals(c, dr.findElement(By.id("fax")).getAttribute("value"));
+		assertEquals(d, dr.findElement(By.id("mail")).getAttribute("value"));
+		assertEquals(e, dr.findElement(By.id("address")).getAttribute("value"));
+		assertEquals(f, dr.findElement(By.id("corpTitle")).getAttribute("value"));
+		assertEquals(g, dr.findElement(By.id("note")).getAttribute("value"));
+		assertEquals(h, dr.findElement(By.id("downloadURL")).getAttribute("value"));
+		assertEquals(i, dr.findElement(By.id("smsSuffix")).getAttribute("value"));
 	}
 }

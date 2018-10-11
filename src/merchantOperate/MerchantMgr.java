@@ -1,9 +1,12 @@
 package merchantOperate;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import baseService.BaseService;
 import baseService.SeleniumConstants;
@@ -28,68 +31,53 @@ public class MerchantMgr extends BaseService {
 	}
 
 	private void addMerchant() throws InterruptedException {
-		dr.findElement(By.id("addAccountBtn")).click();
-		sleep(2000);// 进入创建商户界面
-		dr.findElement(By.id("spAccountAdd")).sendKeys("hans111");
-		dr.findElement(By.id("spPassAdd")).sendKeys("000000");
-		dr.findElement(By.id("spNameAdd")).sendKeys("菇凉de店铺");
-		dr.findElement(By.id("servPhoneAdd")).sendKeys("17811110000");
-		dr.findElement(By.id("spAddrAdd")).sendKeys("江苏省南京市南京南站");
-		sleep(2000);
-		dr.findElement(By.id("spAddrBntAdd")).click();
-		sleep(2000);
-		dr.findElement(By.id("geoAddress")).sendKeys("南京市雨花台区玉兰路98号");
-		dr.findElement(By.id("geoAddressBtn")).click();
-		sleep(2000);
-		dr.findElement(By.xpath("//*[@id='piccBusPointMarker']/table[1]//strong")).click();
-		sleep(2000);
-
-		closePrompt("piccBusPointMapPanel", 1);
+		clickEle("//*[@id='addAccountBtn']", 1500);// 进入创建商户界面
+		clearInp("spAccountAdd", "hans111");
+		clearInp("spPassAdd", "000000");
+		clearInp("spNameAdd", "菇凉de店铺");
+		clearInp("servPhoneAdd", "17811110000");
+		clearInp("spAddrAdd", "江苏省南京市南京南站");
+		clickEle("//*[@id='spAddrBntAdd']", 1000);
+		clearInp("geoAddress", "南京市雨花台区玉兰路98号");
+		clickEle("//*[@id='geoAddressBtn']", 1500);
+		clickEle("//*[@id='piccBusPointMarker']/table[1]//strong", 1000);
+		closePrompt("piccBusPointMapPanel", 1, 1000);
 		removeReadonly("spTimeStartAdd");
 		removeReadonly("spTimeEndAdd");
+		clearInp("spTimeStartAdd", "10:00");
+		clearInp("spTimeEndAdd", "21:00");
+		clearInp("spOpenBankAdd", "南京银行");
+		clearInp("spOpenBankUserAdd", "张宪森");
+		clearInp("spBankAccountAdd", "12345678901111122222");
+		clearInp("serverRateAdd", "0.3");
 
-		dr.findElement(By.id("spTimeStartAdd")).sendKeys("10:00");
-		dr.findElement(By.id("spTimeEndAdd")).sendKeys("21:00");
-		dr.findElement(By.id("spOpenBankAdd")).sendKeys("南京银行");
-		dr.findElement(By.id("spOpenBankUserAdd")).sendKeys("张宪森");
-		dr.findElement(By.id("spBankAccountAdd")).sendKeys("12345678901111122222");
-		dr.findElement(By.id("serverRateAdd")).sendKeys("0.3");
-		sleep(2000);
 		dr.findElement(By.xpath("//div[@id='uploadGoodsPicDivAdd']//input")).sendKeys(getTemplatePath("userphoto"));
 		sleep(4000);
-		closePrompt("addDeptUser", 1);
-		sleep(5000);
+		closePrompt("addDeptUser", 1, 1000);
+		new WebDriverWait(dr, 15).until(ExpectedConditions.elementToBeClickable(By.id("searchSpName")));
+		sleep(2000);
 	}
 
 	private void searMerchant() throws InterruptedException {
-		dr.findElement(By.id("searchSpName")).sendKeys("菇凉de店铺");
-		dr.findElement(By.id("searchServPhone")).sendKeys("17811110000");
-		sleep(1500);
-
+		clearInp("searchSpName", "菇凉de店铺");
+		clearInp("searchServPhone", "17811110000");
 		searchTest("searchBtn", "pages");
 	}
 
 	private void modMerchant() throws InterruptedException {
-		dr.findElement(By.name("j-editDepartUser")).click();
-		sleep(2000);
-		dr.findElement(By.id("servPhoneEdit")).clear();
-		dr.findElement(By.id("servPhoneEdit")).sendKeys("18011112222");
-		sleep(1500);
+		clickEle("//*[@name='j-editDepartUser']", 1500);
+		clearInp("servPhoneEdit", "18011112222");
+		closePrompt("editDeptUser", 1, 2000);
 
-		closePrompt("editDeptUser", 1);
 		assertEquals("成功 修改商户信息成功", dr.findElement(By.className("noty_text")).getText());
 		assertEquals(false, isElementExsit(dr, "//*[@id='mainContentList']//td"));
 
-		dr.findElement(By.id("searchServPhone")).clear();
-		dr.findElement(By.id("searchServPhone")).sendKeys("18011112222");
-		sleep(1500);
-
+		clearInp("searchServPhone", "18011112222");
 		searchTest("searchBtn", "pages");
 	}
 
 	private void seeDetail() throws InterruptedException {
-		dr.findElement(By.name("j-accountDetail")).click();
-		sleep(3000);
+		clickEle("//*[@name='j-accountDetail']", 2000);
 
 		assertEquals("hans111", dr.findElement(By.id("spAccountInfo")).getAttribute("value"));
 		assertEquals("菇凉de店铺", dr.findElement(By.id("spNameInfo")).getAttribute("value"));
@@ -100,16 +88,13 @@ public class MerchantMgr extends BaseService {
 		assertEquals("12345678901111122222", dr.findElement(By.id("spBankAccountInfo")).getAttribute("value"));
 		assertEquals("0.3", dr.findElement(By.id("spServerRateInfo")).getAttribute("value"));
 
-		closePrompt("deptUserInfo", 1);
+		closePrompt("deptUserInfo", 1, 1500);
 	}
 
 	private void resetAndDel(String oname, String t1, String t2) throws InterruptedException {
-		dr.findElement(By.name(oname)).click();
-		sleep(2000);
+		clickEle("//*[@name='" + oname + "']", 2000);
 		assertEquals(t1, dr.findElement(By.className("noty_text")).getText());
-
-		dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();
-		sleep(2000);
+		clickEle("//div[@class='noty_buttons']/button[1]", 2000);
 		assertEquals(t2, dr.findElement(By.className("noty_text")).getText());
 
 		if (oname == "j-deleteDepartUser") {

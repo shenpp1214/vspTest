@@ -32,35 +32,26 @@ public class PersCustomer extends BaseService {
 	@Test
 	public void individualCus() throws Exception {
 		searchData();// 搜索测试
-		openAndHide();// 展开隐藏搜索区域
 		resetTest("resetBtn", "searchBtn", "pages");// 重置测试
-		flip();// 翻页
 	}
 
 	private void searchData() throws InterruptedException {
-		dr.findElement(By.id("searchUserName")).sendKeys("shenpp");
-		dr.findElement(By.id("searchName")).sendKeys("shenpp");
-		dr.findElement(By.id("searchPhone")).sendKeys("15951901290");
-		dr.findElement(By.id("searchEmail")).sendKeys("779230186@qq.com");
-
-		select("searchUserSex", "女");
-		select("searchOwnerType", "VSP");
+		clearInp("searchUserName", "shenpp");
+		clearInp("searchName", "shenpp");
+		clearInp("searchPhone", "15951901290");
+		clearInp("searchEmail", "779230186@qq.com");
+		select("searchUserSex", "女", 1800);
+		select("searchOwnerType", "VSP", 1800);
 		searchTest("searchBtn", "pages");// 搜索测试
 	}
 
-	private void openAndHide() throws InterruptedException {
-		openHide(false);// 隐藏搜索
-		openHide(true);// 展开搜索
-	}
-
 	protected void setPoints(String text) throws InterruptedException {
-		dr.findElement(By.id("changePoints")).sendKeys("200");
-		closePrompt("bonusSetPanel", 1);
+		clearInp("changePoints", "200");
+		closePrompt("bonusSetPanel", 1, 1500);
 		assertEquals("警告 备注不能为空", dr.findElement(By.className("noty_text")).getText());
 
-		dr.findElement(By.id("changePointsRemark")).sendKeys(text);
-		closePrompt("bonusSetPanel", 1);
+		clearInp("changePointsRemark", text);
+		closePrompt("bonusSetPanel", 1, 2000);
 		assertEquals("成功 用户红利设置成功", dr.findElement(By.className("noty_text")).getText());
 	}
-
 }

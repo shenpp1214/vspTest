@@ -93,7 +93,7 @@ public class VehicleAddSummary extends BaseService {
 			if (i % 3 == 0) {
 				elements.get(i).click();
 				sleep(1000);
-				closePrompt("addDetail", 1);
+				closePrompt("addDetail", 1, 1000);
 			}
 		}
 		compareTest(1, 2, 3);
@@ -116,16 +116,5 @@ public class VehicleAddSummary extends BaseService {
 	protected void removeReadonly(String outid) {
 		JavascriptExecutor js = (JavascriptExecutor) dr;
 		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
-	}
-
-	protected void clearInp(String id, String d) throws InterruptedException {
-		dr.findElement(By.id(id)).clear();
-		dr.findElement(By.id(id)).sendKeys(d);
-		sleep(1500);
-	}
-
-	protected void clickEle(String xid, int sec) throws InterruptedException {
-		dr.findElement(By.xpath(xid)).click();
-		sleep(sec);
 	}
 }

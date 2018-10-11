@@ -26,70 +26,64 @@ public class CommonTools4App extends BaseService {
 		searchCategory("测试Test");// 搜索新建的栏目
 		operateData("j-edit", "//*[@id='editPanel']/following-sibling::div//button[1]", "成功 编辑汽车后服务成功");// 编辑
 		operateData("j-open", "//div[@class='noty_buttons']/button[1]", "成功 停用成功");// 停用
-		modState();// 更改查询状态：停用
-		delCategory("j-delete", "成功 删除成功");// 删除
+		select("commonToolsStatus4Search", "停用", 1000);
+		clickEle("//*[@id='searchBtn']", 1500);
+		operateData("j-delete", "//div[@class='noty_buttons']/button[1]", "成功 删除成功");// 删除
+
+		assertEquals("没有查询到数据", dr.findElement(By.xpath("//div[@id='mainContentList']//td")).getText());
+
 		mysqlModify(SeleniumConstants.del_category);// 清理数据
 	}
 
 	protected void categoryTypeTest() throws Exception {
-		dr.findElement(By.linkText("后服栏目")).click();
-
-		sleep(1500);
+		clickEle("//a[text()='后服栏目']", 1000);
 		sortTest();// 排序
 		newData("addCategoryTypeBtn", "addPanelType", "成功 创建后服栏目成功");// 新增后服栏目
 		searchCategory("百宝箱");// 搜索新建的栏目
 		operateData("j-editType", "//*[@id='editPanelType']/following-sibling::div//button[1]", "成功 编辑后服栏目成功");// 编辑后服务栏目
-		modState();// 更改查询状态：停用
-		delCategory("j-deleteType", "成功 删除后服栏目成功");// 删除后服务栏目
+		select("commonToolsStatus4Search", "停用", 1000);
+		clickEle("//*[@id='searchBtn']", 1500);
+		operateData("j-deleteType", "//div[@class='noty_buttons']/button[1]", "成功 删除后服栏目成功");// 删除
+
+		assertEquals("没有查询到数据", dr.findElement(By.xpath("//div[@id='mainContentList']//td")).getText());// 删除后服务栏目
 	}
 
 	private void sortTest() throws InterruptedException {
 		if (isElementExsit(dr, "//*[@id='mainContentList']/table/tbody/tr[3]")) {
 			String name = dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[3]/td[3]")).getText();
 
-			dr.findElement(By.xpath("//td[text()='" + name + "']/following-sibling::td/a[@name='j-sortType']")).click();
-			sleep(1500);// 点击第3行的排序按钮
-			dr.findElement(By.id("categoryTypeSort")).clear();
-			dr.findElement(By.id("categoryTypeSort")).sendKeys("1");
-			sleep(2000);
-			dr.findElement(By.xpath("//div[@id='sortPanelType']/following-sibling::div//button[1]")).click();
-			sleep(3000);
+			clickEle("//td[text()='" + name + "']/following-sibling::td/a[@name='j-sortType']", 1500);// 点击第3行的排序按钮
+			clearInp("categoryTypeSort", "1");
+			closePrompt("sortPanelType", 1, 2000);
 
 			assertEquals("成功 排序成功", dr.findElement(By.className("noty_text")).getText());
-			assertEquals(name,
-					dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr[2]/td[3]")).getText());
+			assertEquals(name, dr.findElement(By.xpath("//*[@id='mainContentList']//tr[2]/td[3]")).getText());
 		}
 	}
 
-	private void newData(String addid, String did, String text) throws InterruptedException {
-		dr.findElement(By.id(addid)).click();// 点击新增汽车后服务
-		sleep(1500);
+	private void newData(String aid, String did, String text) throws InterruptedException {
+		clickEle("//*[@id='" + aid + "']", 1500);
 
 		if (isElementExsit(dr, "//li[@class='active']/a[text()='后服栏目']")) {
-			dr.findElement(By.id("categoryTypeNameAdd")).sendKeys("百宝箱");// 输入栏目名称
-			sleep(1500);
+			clearInp("categoryTypeNameAdd", "百宝箱");// 输入栏目名称
 		} else {
-			select("typeIdAdd", "百宝箱");
-			select("sysModuleListAdd", "违章查询");
+			select("typeIdAdd", "百宝箱", 1000);
+			select("sysModuleListAdd", "违章查询", 1000);
+			clearInp("categoryNameAdd", "测试Test");// 输入栏目名称
 
-			dr.findElement(By.id("categoryNameAdd")).sendKeys("测试Test");// 输入栏目名称
 			dr.findElement(By.xpath("//div[@id='addPanel']/table/tbody/tr[3]/td[2]//li//input"))
 					.sendKeys(getTemplatePath("candy1"));// 上传图片
 			sleep(5000);
 		}
-
-		dr.findElement(By.xpath("//div[@id='" + did + "']/following-sibling::div//button[1]")).click();// 点击确定按钮
-		sleep(2000);
+		closePrompt(did, 1, 2000);
 
 		assertEquals(text, dr.findElement(By.className("noty_text")).getText());
 	}
 
 	private void searchCategory(String text) throws InterruptedException {
-		select("commonToolsStatus4Search", "启用");
-
-		dr.findElement(By.id("commonToolsName4Search")).sendKeys(text);
-		dr.findElement(By.id("searchBtn")).click();
-		sleep(2000);
+		select("commonToolsStatus4Search", "启用", 1000);
+		clearInp("commonToolsName4Search", text);
+		clickEle("//*[@id='searchBtn']", 1500);
 
 		assertEquals("1", dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr/td[2]")).getText());
 		assertEquals(text, dr.findElement(By.xpath("//*[@id='mainContentList']/table/tbody/tr/td[3]")).getText());
@@ -97,34 +91,14 @@ public class CommonTools4App extends BaseService {
 	}
 
 	private void operateData(String oid, String ox, String editText) throws InterruptedException {
-		dr.findElement(By.name(oid)).click();
-		sleep(1500);
+		clickEle("//*[@name='" + oid + "']", 1500);
 
-		if (isElementExsit(dr, "//li[@class='active']/a[text()='后服栏目']")) {
-			select("categoryTypeStatusEdit", "停用");
-		}
+		if (oid == "j-editType")
+			select("categoryTypeStatusEdit", "停用", 1000);
 
-		dr.findElement(By.xpath(ox)).click();// 点击确定按钮
-		sleep(2000);
+		clickEle(ox, 2000);// 点击确定按钮
 
 		assertEquals(editText, dr.findElement(By.className("noty_text")).getText());
-	}
-
-	private void modState() throws InterruptedException {
-		select("commonToolsStatus4Search", "停用");
-
-		dr.findElement(By.id("searchBtn")).click();
-		sleep(1500);
-	}
-
-	private void delCategory(String deln, String dtext) throws InterruptedException {
-		dr.findElement(By.name(deln)).click();// 点击删除按钮
-		sleep(1500);
-		dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();// 点击确认按钮
-		sleep(2000);
-
-		assertEquals(dtext, dr.findElement(By.className("noty_text")).getText());
-		assertEquals("没有查询到数据", dr.findElement(By.xpath("//div[@id='mainContentList']//td")).getText());
 	}
 
 	private static void mysqlModify(String aaa) throws Exception {

@@ -50,18 +50,15 @@ public class OrderMgr extends BaseService {
 	}
 
 	private void everyStaOper(String t1, String t2, String t3, String sta) throws Exception {
-		dr.findElement(By.linkText(t1)).click();
-		sleep(1500);
-		dr.findElement(By.id("searchOrderNo")).sendKeys("59374cadee0c42d993a08dca3c111fef");
-		sleep(1500);
-
+		clickEle("//a[text()='" + t1 + "']", 1500);
+		clearInp("searchOrderNo", "59374cadee0c42d993a08dca3c111fef");
 		searchTest("searchBtn", "pages");
 		seeDetail(t2, t3);
 		if (t1 == "已发货") {
 			assertEquals("顺丰", dr.findElement(By.id("expressCompanyInfo")).getAttribute("value"));
 			assertEquals("2018012901", dr.findElement(By.id("expressNumberInfo")).getAttribute("value"));
 		}
-		closePrompt("deptUserInfo", 1);
+		closePrompt("deptUserInfo", 1, 1500);
 
 		switch (t1) {
 		case "待支付":
@@ -70,28 +67,23 @@ public class OrderMgr extends BaseService {
 			sleep(2000);
 			break;
 		case "待发货":
-			dr.findElement(By.id("expressCompanyInfo")).sendKeys("顺丰");
-			dr.findElement(By.id("expressNumberInfo")).sendKeys("2018012901");
-			sleep(2000);
-
-			closePrompt("deptUserInfo", 1);
+			clearInp("expressCompanyInfo", "顺丰");
+			clearInp("expressNumberInfo", "2018012901");
+			closePrompt("deptUserInfo", 1, 1500);
 			new WebDriverWait(dr, 15).until(ExpectedConditions.elementToBeClickable(By.className("noty_text")));
 			assertEquals("成功 发货成功", dr.findElement(By.className("noty_text")).getText());
 			sleep(2000);
 			break;
 		default:
 			prepareData(sta);
-
-			dr.findElement(By.id("searchBtn")).click();
-			sleep(2000);
+			clickEle("//*[@id='searchBtn']", 1500);
 			break;
 		}
 		assertEquals("暂无数据", dr.findElement(By.xpath("//*[@id='mainContentList']//td")).getText());
 	}
 
 	protected void seeDetail(String os, String us) throws InterruptedException {
-		dr.findElement(By.name("j-accountDetail")).click();
-		sleep(3000);
+		clickEle("//*[@name='j-accountDetail']", 3000);
 
 		assertEquals("59374cadee0c42d993a08dca3c111fef", dr.findElement(By.id("orderIdInfo")).getAttribute("value"));
 		assertEquals("嘉兴人保（金币商城）17121216501910047", dr.findElement(By.id("userNameInfo")).getAttribute("value"));

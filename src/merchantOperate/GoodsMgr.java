@@ -37,9 +37,10 @@ public class GoodsMgr extends BaseService {
 		searGoods();// 搜索新增的商城商品
 		modGoods();// 修改商城商品信息
 		seeDetail();// 查看详情
-		batchDownUp("batchDownBtn", "下架");// 批量下架
-		batchDownUp("batchUpBtn", "上架");// 批量上架
-		deleteGoods();// 删除新建的商城商品
+		operGoods("selectSpBalance", "batchDownBtn", "确认下架吗？", "成功 商品批量下架成功", "下架");
+		operGoods("selectSpBalance", "batchUpBtn", "确认上架吗？", "成功 商品批量上架成功", "上架");
+		operGoods("j-deleteDepartUser", null, "是否决定删除[开心糖果]商品?", "成功 删除商品成功", null);// 删除新建的商城商品
+		resetTest("resetBtn", "searchBtn", "pages");
 	}
 
 	private void addGoods(int num2) throws InterruptedException {
@@ -47,30 +48,25 @@ public class GoodsMgr extends BaseService {
 		cal.add(Calendar.YEAR, 1);
 		String date1 = DateFormatUtils.format(cal, "yyyy-MM-dd");
 
-		dr.findElement(By.id("addGoodsBtn")).click();
-		sleep(2000);// 进入创建商品界面
-		dr.findElement(By.id("goodsNameAdd")).sendKeys("开心糖果");
-		dr.findElement(By.id("goodsPriceAdd")).sendKeys("18.5");
-		sleep(1500);
+		clickEle("//*[@id='addGoodsBtn']", 1000);// 进入创建商品界面
+		clearInp("goodsNameAdd", "开心糖果");
+		clearInp("goodsPriceAdd", "18.5");
+		select("goodsTypeAdd", "糖果铺子", 1000);
+		select("merchantAdd", "菇凉de店铺", 1000);
+		select("goodsPreBookAdd", "至少提前一天预约", 1000);
+		removeReadonly("goodsDateStartAdd");
+		removeReadonly("goodsDateEndAdd");
+		clearInp("goodsDateStartAdd", date);
+		clearInp("goodsDateEndAdd", date1);
+
 		dr.findElement(By.xpath("//div[@id='uploadListPicDivAdd']//input")).sendKeys(getTemplatePath("candy1"));
 		sleep(3000);
 		dr.findElement(By.xpath("//div[@id='uploadGoodsPicDivAdd']//input")).sendKeys(getTemplatePath("candy1"));
 		sleep(3000);
-
-		select("goodsTypeAdd", "糖果铺子");
-		select("merchantAdd", "菇凉de店铺");
-		select("goodsPreBookAdd", "至少提前一天预约");
-		removeReadonly("goodsDateStartAdd");
-		removeReadonly("goodsDateEndAdd");
-
-		dr.findElement(By.id("goodsDateStartAdd")).sendKeys(date);
-		dr.findElement(By.id("goodsDateEndAdd")).sendKeys(date1);
-		sleep(2000);
 		dr.switchTo().frame(dr.findElement(By.xpath("//div[@id='addDeptUser']//iframe")));
 		dr.findElement(By.tagName("body")).sendKeys("测试测试测试");
 		dr.switchTo().defaultContent();
-		closePrompt("addDeptUser", 1);
-		sleep(3000);
+		closePrompt("addDeptUser", 1, 4000);
 
 		String pages1 = dr.findElement(By.id("pages")).getText();
 		int num1 = Integer.valueOf(pages1.substring(1, pages1.length() - 3));
@@ -78,61 +74,43 @@ public class GoodsMgr extends BaseService {
 	}
 
 	private void searGoods() throws InterruptedException {
-		dr.findElement(By.id("searchSpName")).sendKeys("菇凉de店铺");
-		dr.findElement(By.id("searchGoodsName")).sendKeys("开心糖果");
-		sleep(1500);
-
-		select("searchGoodsType", "糖果铺子");
+		clearInp("searchSpName", "菇凉de店铺");
+		clearInp("searchGoodsName", "开心糖果");
+		select("searchGoodsType", "糖果铺子", 1000);
 		searchTest("searchBtn", "pages");
 	}
 
 	private void modGoods() throws InterruptedException {
-		dr.findElement(By.name("j-editDepartUser")).click();
-		sleep(1500);
-
-		select("goodsStyleEdit", " 在线邮寄");// 更改商品类型：在线邮寄
-		closePrompt("editDeptUser", 1);
+		clickEle("//*[@name='j-editDepartUser']", 1500);
+		select("goodsStyleEdit", " 在线邮寄", 1000);// 更改商品类型：在线邮寄
+		closePrompt("editDeptUser", 1, 2000);
 
 		assertEquals("成功 修改商品信息成功", dr.findElement(By.className("noty_text")).getText());
 	}
 
 	private void seeDetail() throws InterruptedException {
-		dr.findElement(By.name("j-accountDetail")).click();
-		sleep(1500);
+		clickEle("//*[@name='j-accountDetail']", 1500);
 
 		assertEquals("开心糖果", dr.findElement(By.id("goodsNameInfo")).getAttribute("value"));
 		assertEquals(true, dr.findElement(By.id("isPickUpInfo")).isSelected());
 
-		closePrompt("deptUserInfo", 1);
+		closePrompt("deptUserInfo", 1, 1500);
 	}
 
-	private void batchDownUp(String duid, String dutext) throws InterruptedException {
-		dr.findElement(By.name("selectSpBalance")).click();
-		sleep(1500);
-		dr.findElement(By.id(duid)).click();
-		sleep(1500);// 批量
+	private void operGoods(String n, String duid, String t1, String t2, String t3) throws InterruptedException {
+		clickEle("//*[@name='" + n + "']", 1500);
+		if (n == "selectSpBalance") {
+			clickEle("//*[@id='" + duid + "']", 1500);// 批量
+		}
 
-		assertEquals("确认" + dutext + "吗？", dr.findElement(By.className("noty_text")).getText());
+		assertEquals(t1, dr.findElement(By.className("noty_text")).getText());
+		clickEle("//div[@class='noty_buttons']/button[1]", 1500);
+		assertEquals(t2, dr.findElement(By.className("noty_text")).getText());
 
-		dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();
-		sleep(2000);
-
-		assertEquals("成功 商品批量" + dutext + "成功", dr.findElement(By.className("noty_text")).getText());
-		assertEquals("已" + dutext + "", dr.findElement(By.xpath("//*[@id='mainContentList']//td[5]")).getText());
-	}
-
-	private void deleteGoods() throws InterruptedException {
-		dr.findElement(By.name("j-deleteDepartUser")).click();
-		sleep(2000);
-
-		assertEquals("是否决定删除[开心糖果]商品?", dr.findElement(By.className("noty_text")).getText());
-
-		dr.findElement(By.xpath("//div[@class='noty_buttons']/button[1]")).click();
-		sleep(2000);
-
-		assertEquals("成功 删除商品成功", dr.findElement(By.className("noty_text")).getText());
-		assertEquals(false, isElementExsit(dr, "//*[@id='mainContentList']//td"));
-		resetTest("resetBtn", "searchBtn", "pages");
+		if (n == "selectSpBalance")
+			assertEquals("已" + t3 + "", dr.findElement(By.xpath("//*[@id='mainContentList']//td[5]")).getText());
+		else
+			assertEquals(false, isElementExsit(dr, "//*[@id='mainContentList']//td"));
 	}
 
 	protected void removeReadonly(String outid) {

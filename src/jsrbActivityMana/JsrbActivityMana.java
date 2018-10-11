@@ -15,13 +15,10 @@ public class JsrbActivityMana extends BaseService {
 	@BeforeClass
 	public static void openBrowerJsrbActMana() throws Exception {
 		openBrower("vsp_url");
-		deleteData();
-		prepareData();
-	}
-
-	public static void prepareData() throws Exception {
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.insert_act);// 插入活动
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.insert_winrecord);// 插入中奖名单
+		prepareData(SeleniumConstants.del_act);
+		prepareData(SeleniumConstants.del_winrecord);
+		prepareData(SeleniumConstants.insert_act);
+		prepareData(SeleniumConstants.insert_winrecord);
 	}
 
 	@Before
@@ -42,24 +39,21 @@ public class JsrbActivityMana extends BaseService {
 	}
 
 	private void openWinRecord() throws InterruptedException {
-		dr.findElement(By.xpath("//td[text()='请你吃大闸蟹']/following-sibling::td[5]/a")).click();
-		sleep(1500);
+		clickEle("//td[text()='请你吃大闸蟹']/following-sibling::td[5]/a", 1500);
+
 		assertEquals("中奖名单",
 				dr.findElement(By.xpath("//div[@id='lotteryListPanel']/preceding-sibling::div/span")).getText());
-		assertEquals("请你吃大闸蟹", dr.findElement(By.xpath("//div[@id='mainContentList1']/table/tbody//td[2]")).getText());
-		assertEquals("199****5961",
-				dr.findElement(By.xpath("//div[@id='mainContentList1']/table/tbody//td[4]")).getText());
-		assertEquals("未处理", dr.findElement(By.xpath("//div[@id='mainContentList1']/table/tbody//td[9]")).getText());
+		assertEquals("请你吃大闸蟹", dr.findElement(By.xpath("//div[@id='mainContentList1']//tr[1]/td[2]")).getText());
+		assertEquals("199****5961", dr.findElement(By.xpath("//div[@id='mainContentList1']//tr[1]/td[4]")).getText());
+		assertEquals("未处理", dr.findElement(By.xpath("//div[@id='mainContentList1']//tr[1]/td[9]")).getText());
 	}
 
 	private void operateRecord() throws InterruptedException {
-		dr.findElement(By.name("j-handleLottery")).click();// 打开处理框
-		sleep(1500);
-		dr.findElement(By.id("expressCorp")).sendKeys("顺丰速递");// 输入快递公司
-		dr.findElement(By.id("expressNo")).sendKeys("9212141100");// 输入快递单号
-		sleep(2000);
-		dr.findElement(By.xpath("//div[@id='handleLotteryPanel']/following-sibling::div//button[1]")).click();// 点击处理按钮
-		sleep(2000);
+		clickEle("//*[@name='j-handleLottery']", 1500);// 打开处理框
+		clearInp("expressCorp", "顺丰速递");// 输入快递公司
+		clearInp("expressNo", "9212141100");// 输入快递单号
+		clickEle("//div[@id='handleLotteryPanel']/following-sibling::div//button[1]", 2000);
+
 		assertEquals("成功 处理成功", dr.findElement(By.className("noty_text")).getText());
 		assertEquals("已处理", dr.findElement(By.xpath("//div[@id='mainContentList1']/table/tbody//td[9]")).getText());
 	}
@@ -67,12 +61,11 @@ public class JsrbActivityMana extends BaseService {
 	private void closeWinRecord() throws InterruptedException {
 		((JavascriptExecutor) dr).executeScript("arguments[0].scrollIntoView(true);",
 				dr.findElement(By.xpath("//div[@id='handleLotteryPanel']/following-sibling::div//button")));
-		dr.findElement(By.xpath("//div[@id='lotteryListPanel']/following-sibling::div//button")).click();// 关闭
-		sleep(2000);
+
+		clickEle("//div[@id='lotteryListPanel']/following-sibling::div//button", 1500);
 	}
 
-	private static void deleteData() throws Exception {
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.del_act);
-		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", SeleniumConstants.del_winrecord);
+	public static void prepareData(String aa) throws Exception {
+		mysqlConnect("jdbc.driver", "jdbc.url", "jdbc.username", "jdbc.password", aa);
 	}
 }

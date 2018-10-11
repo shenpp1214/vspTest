@@ -14,42 +14,34 @@ public class VehicleMana extends BaseService {
 		entryPage("客户车辆", "车辆档案");// 进入企业客户界面
 		searchData();// 搜索数据
 		vehicleDetail();// 操作 - 查看车辆详情
-		resetTest("resetBtn", "searchBtn", "pages");// 重置测试
 		downloadTemplate();// 下载导入模板
 	}
 
 	private void searchData() throws InterruptedException {
-		select("searchBrand", "奔驰");
-		select("searchProductId", "R级（进口）");
-		select("searchBindStatus", "空闲");
-		select("searchDrivingRecordSwitch", "否");
-		select("searchOwnerType", "个人");
-
-		dr.findElement(By.id("ownerSearch")).click();
-		sleep(3000);
-		dr.findElement(By.id("createUserName")).sendKeys("shenpp1214");
-		dr.findElement(By.id("searchWebUserBtn")).click();
-		sleep(2000);
-		dr.findElement(By.xpath("//*[@id='searchWebUserList']/tbody/tr/td[4]/input")).click();
-		dr.findElement(By.id("searchLpno")).sendKeys("苏J01234");
-
+		select("searchBrand", "奔驰", 2000);
+		select("searchProductId", "R级（进口）", 1500);
+		select("searchBindStatus", "空闲", 1000);
+		select("searchDrivingRecordSwitch", "否", 1000);
+		select("searchOwnerType", "个人", 1000);
+		clickEle("//*[@id='ownerSearch']", 3000);
+		clearInp("createUserName", "shenpp1214");
+		clickEle("//*[@id='searchWebUserBtn']", 2000);
+		clickEle("//*[@id='searchWebUserList']//tr/td[4]/input", 1000);
+		clearInp("searchLpno", "苏J01234");
 		searchTest("searchBtn", "pages");// 搜索测试
 	}
 
 	private void vehicleDetail() throws InterruptedException {
-		dr.findElement(By.name("viechlDetail")).click();
-		sleep(3000);
-
+		clickEle("//*[@name='viechlDetail']", 3000);
 		switchPage("销售信息", "1");
 		switchPage("基本信息", "0");
 		switchPage("保险信息", "2");
-		closePrompt("viechlDetail", 1);// 关闭弹框
+		closePrompt("viechlDetail", 1, 1500);// 关闭弹框
+		resetTest("resetBtn", "searchBtn", "pages");// 重置测试
 	}
 
 	private void downloadTemplate() throws Exception {
-		dr.findElement(By.id("excelImportTplDownload")).click();// 下载导入模板
-		sleep(2000);
-
+		clickEle("//*[@id='excelImportTplDownload']", 2000);
 		assertEquals("姓名（必填）", getCellValue("Sheet1", 1, 1));
 		assertEquals("手机号码（必填）", getCellValue("Sheet1", 1, 2));
 		assertEquals("车牌号码（必填）", getCellValue("Sheet1", 1, 6));
@@ -57,11 +49,9 @@ public class VehicleMana extends BaseService {
 		assertEquals("车辆品牌（必填）", getCellValue("Sheet1", 1, 9));
 	}
 
-	protected void switchPage(String text, String num) throws InterruptedException {
-		dr.findElement(By.linkText(text)).click();
-		sleep(2000);
+	protected void switchPage(String t, String num) throws InterruptedException {
+		clickEle("//a[text()='" + t + "']", 2000);
 
-		assertEquals(text, dr.findElement(By.xpath("//a[@name='data_tab' and @val= '" + num + "']")).getText());
+		assertEquals(t, dr.findElement(By.xpath("//a[@name='data_tab' and @val= '" + num + "']")).getText());
 	}
-
 }

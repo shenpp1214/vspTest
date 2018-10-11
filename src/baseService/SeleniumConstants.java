@@ -11,14 +11,6 @@ public class SeleniumConstants {
 	// 销量排行+功能点击统计
 	public static int totalOrders = 0;
 	public static double totalPay = 0.0;
-	
-	// 管理中心-操作记录
-	public static final String log_username = "admin@dina";
-	public static final String log_sort1 = "活动管理类型";
-	public static final String log_type1 = "全部";
-	public static final String usertype = "总管理员";
-	public static final String log_sort2 = "设备管理类型";
-	public static final String log_type2 = "调拨设备";
 	// 管理中心-员工账号
 	public static final String del_user = "DELETE from iov.sys_user where realname='张先森';";
 	public static final String del_sa = "DELETE FROM iov.sa_account WHERE sa_id='03f2c40bdaaa451db972371973f6c750';";

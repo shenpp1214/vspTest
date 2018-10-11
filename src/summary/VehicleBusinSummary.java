@@ -104,23 +104,12 @@ public class VehicleBusinSummary extends BaseService {
 		for (int i = 1; i < elements.size(); i = i + 3) {
 			elements.get(i).click();
 			sleep(1000);
-			closePrompt("businDetail", 1);
+			closePrompt("businDetail", 1, 1000);
 		}
 	}
 
 	protected void removeReadonly(String outid) {
 		JavascriptExecutor js = (JavascriptExecutor) dr;
 		js.executeScript("document.getElementById(\"" + outid + "\").removeAttribute('readonly');");
-	}
-
-	protected void clearInp(String id, String d) throws InterruptedException {
-		dr.findElement(By.id(id)).clear();
-		dr.findElement(By.id(id)).sendKeys(d);
-		sleep(1500);
-	}
-
-	protected void clickEle(String xid, int sec) throws InterruptedException {
-		dr.findElement(By.xpath(xid)).click();
-		sleep(sec);
 	}
 }

@@ -21,14 +21,19 @@ public class BonusStatic extends BaseService {
 	}
 
 	private void dayPointsStatic() throws InterruptedException {
-		search("publishTimeBeginSearch", "publishTimeEndSearch", "2018-01-01", "2018-01-10");// 搜索具体的数据
+		clearInp("publishTimeBeginSearch", "2018-01-01");
+		clearInp("publishTimeEndSearch", "2018-01-10");
+		clickEle("//*[@id='searchSubmit4Day']", 1500);
+
 		if (isElementExsit(dr, "//div[@id='staticList']//tbody//tr[1]/td[3]/a")) {
-			openPrompt("sentOutPointsDetail", "发放积分详情");// 打开发放积分详情
-			closePrompt("dayDetailPanel", 1);// 关闭弹框
+			clickEle("//a[@name='sentOutPointsDetail']", 1500);
+			assertEquals("发放积分详情", dr.findElement(By.id("ui-id-2")).getText());// 打开发放积分详情
+			closePrompt("dayDetailPanel", 1, 1000);// 关闭弹框
 		}
 		if (isElementExsit(dr, "//div[@id='staticList']//tbody//td[4]/a")) {
-			openPrompt("receivedPointsDetail", "回收积分详情");// 打开回收积分详情
-			closePrompt("dayDetailPanel", 1);// 关闭弹框
+			clickEle("//a[@name='receivedPointsDetail']", 1500);
+			assertEquals("回收积分详情", dr.findElement(By.id("ui-id-2")).getText());// 打开回收积分详情
+			closePrompt("dayDetailPanel", 1, 1000);// 关闭弹框
 		}
 
 		int grantPoint = Integer
@@ -44,20 +49,5 @@ public class BonusStatic extends BaseService {
 		System.out.println(grantPoint + "," + toGrantPoints);
 
 		resetTest("restBtn4Day", "searchSubmit4Day", "pages");// 重置搜索
-	}
-
-	protected void search(String id1, String id2, String s1, String s2) throws InterruptedException {
-		dr.findElement(By.id(id1)).sendKeys(s1);
-		dr.findElement(By.id(id2)).sendKeys(s2);
-		sleep(2000);
-		dr.findElement(By.id("searchSubmit4Day")).click();
-		sleep(1500);
-	}
-
-	protected void openPrompt(String name, String text) throws InterruptedException {
-		dr.findElement(By.name(name)).click();// 打开发放积分详情
-		sleep(1500);
-
-		assertEquals(text, dr.findElement(By.id("ui-id-2")).getText());
 	}
 }

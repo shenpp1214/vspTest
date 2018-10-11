@@ -5,7 +5,6 @@ import org.junit.rules.Timeout;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
@@ -78,68 +77,54 @@ public class BaseService {
 		dr.close();
 	}
 
-	public void switchIframe(String mainFrame) {
-		dr.switchTo().defaultContent();
-		WebElement frame = dr.findElement(By.name(mainFrame));
-		dr.switchTo().frame(frame);
-	}
-
 	public void loginVsp(String user, String pwd, String val) throws InterruptedException {
-		dr.findElement(By.id("loginemail")).sendKeys(props.getProperty(user));// 输入用户名
-		dr.findElement(By.id("loginpassword")).sendKeys(props.getProperty(pwd));// 输入密码
-		dr.findElement(By.id("loginvalidate")).sendKeys(props.getProperty(val));// 输入验证码
-		dr.findElement(By.id("loginbtn")).click();// 登录
-		sleep(8000);
+		clearInp("loginemail", props.getProperty(user));// 输入用户名
+		clearInp("loginpassword", props.getProperty(pwd));// 输入密码
+		clearInp("loginvalidate", props.getProperty(val));// 输入验证码
+		clickEle("//*[@id='loginbtn']", 8000);// 登录
 	}
 
 	public void logoutVsp() throws InterruptedException {
 		dr.switchTo().defaultContent();
-		dr.findElement(By.id("logout")).click();
-		sleep(3000);
+		clickEle("//*[@id='logout']", 3000);
 
 		assertEquals("用户登录", dr.findElement(By.className("border-bottom")).getText());
 	}
 
-	public void select(String sid, String sval) throws InterruptedException {
+	public void select(String sid, String sval, int n) throws InterruptedException {
 		Select sel1 = new Select(dr.findElement(By.id(sid)));
 		sel1.selectByVisibleText(sval);
-		sleep(3000);
-	}
-
-	public void openHide(Boolean i) throws InterruptedException {
-		// 展开隐藏
-		dr.findElement(By.xpath("//div[@id='j-searchPanel']/div[2]")).click();
-		assertEquals(i, dr.findElement(By.id("searchBtn")).isDisplayed());
-		sleep(2000);
-	}
-
-	public void flip() throws InterruptedException {
-		// 翻页测试
-		dr.findElement(By.xpath("//a[@title='Go to page 3']")).click();
-		sleep(5000);
-
-		assertEquals("3", dr.findElement(By.xpath("//div[@id='page']//li[@class='active']/a")).getText());
+		sleep(n);
 	}
 
 	public void searchTest(String bid, String pid) throws InterruptedException {
-		dr.findElement(By.id(bid)).click();// 根据关键字搜索
-		sleep(2000);
+		clickEle("//*[@id='" + bid + "']", 1500);// 根据关键字搜索
 
 		assertEquals("共1条数据", dr.findElement(By.id(pid)).getText());
 	}
 
 	public void resetTest(String bid1, String bid2, String pid) throws InterruptedException {
-		dr.findElement(By.id(bid1)).click();// 重置搜索条件
-		dr.findElement(By.id(bid2)).click();// 搜索
-		sleep(3000);
+		clickEle("//*[@id='" + bid1 + "']", 1000);// 重置搜索条件
+		clickEle("//*[@id='" + bid2 + "']", 3000);// 搜索
 
 		if (dr.findElement(By.id(pid)).getText().equals("共1条数据"))
 			fail();
 	}
 
-	public static void closePrompt(String did, int num) throws InterruptedException {
+	protected void clearInp(String id, String d) throws InterruptedException {
+		dr.findElement(By.id(id)).clear();
+		dr.findElement(By.id(id)).sendKeys(d);
+		sleep(1000);
+	}
+
+	protected void clickEle(String xid, int sec) throws InterruptedException {
+		dr.findElement(By.xpath(xid)).click();
+		sleep(sec);
+	}
+
+	public static void closePrompt(String did, int num, int sec) throws InterruptedException {
 		dr.findElement(By.xpath("//div[@id='" + did + "']/following-sibling::div//button[" + num + "]")).click();
-		sleep(2000);
+		sleep(sec);
 	}
 
 	public static void sleep(int num) throws InterruptedException {
